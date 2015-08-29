@@ -144,6 +144,14 @@ public class BookService extends IntentService {
 
         }
 
+        if(bookJsonString == null) {
+            final Intent messageIntent = new Intent(MainActivity.MESSAGE_EVENT);
+            final String msg = getString(R.string.add_book_failed_note_internet_msg);
+            messageIntent.putExtra(MainActivity.MESSAGE_KEY, String.format(msg, ean));
+            LocalBroadcastManager.getInstance(getApplicationContext()).sendBroadcast(messageIntent);
+            return;
+        }
+
         final String ITEMS = "items";
 
         final String VOLUME_INFO = "volumeInfo";
