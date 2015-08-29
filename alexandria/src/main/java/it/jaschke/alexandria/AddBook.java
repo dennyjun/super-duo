@@ -39,8 +39,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
 
-    private static final int OLD_ISBN_LENGTH = 10;
-    private static final int NEW_ISBN_LENGTH = 13;
+    private static final int ISBN_LENGTH = 10;
 
     public AddBook(){
     }
@@ -72,19 +71,20 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
             @Override
             public void afterTextChanged(Editable s) {
+                /**
+                 * All ISBN-13 start with 978 so I explicitly display it next to the EditText field
+                 * and just handle the relevant 10 digits after it.
+                 */
                 String ean = s.toString();
-                //catch isbn10 numbers
-                final String newIsbnPrefix = getString(R.string.new_isbn_prefix);
-                if(ean.length() == OLD_ISBN_LENGTH && !ean.startsWith(newIsbnPrefix)){
-                    ean = newIsbnPrefix + ean;
-                }
-                if(ean.length() < NEW_ISBN_LENGTH){
+                if(ean.length() < ISBN_LENGTH){
                     clearFields();
                     return;
                 }
+
                 //Once we have an ISBN, start a book intent
-                Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean);
+                final Intent bookIntent = new Intent(getActivity(), BookService.class);
+                final String newIsbnPrefix = getString(R.string.new_isbn_prefix);
+                bookIntent.putExtra(BookService.EAN, newIsbnPrefix + ean);
                 bookIntent.setAction(BookService.FETCH_BOOK);
                 getActivity().startService(bookIntent);
                 AddBook.this.restartLoader();
@@ -138,11 +138,8 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         if(ean.getText().length() == 0){
             return null;
         }
-        String eanStr= ean.getText().toString();
         final String newIsbnPrefix = getString(R.string.new_isbn_prefix);
-        if(eanStr.length() == OLD_ISBN_LENGTH && !eanStr.startsWith(newIsbnPrefix)){
-            eanStr = newIsbnPrefix + eanStr;
-        }
+        final String eanStr = newIsbnPrefix + ean.getText().toString();
         return new CursorLoader(
                 getActivity(),
                 AlexandriaContract.BookEntry.buildFullBookUri(Long.parseLong(eanStr)),
@@ -210,12 +207,18 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(intentResult != null && intentResult.getContents() != null) {
             final String barcode = intentResult.getContents();
-            if(barcode.length() == OLD_ISBN_LENGTH || barcode.length() == NEW_ISBN_LENGTH) {
-                ean.setText(barcode);
+            if(isBarcodeValid(barcode)) {
+                ean.setText(barcode.substring(getString(R.string.new_isbn_prefix).length()));       // don't need to deal with universal ISBN prefix 978
             } else {
                 showScanFailedMsg();
             }
         }
+    }
+
+    private boolean isBarcodeValid(final String barcode) {
+        final String newIsbnPrefix = getString(R.string.new_isbn_prefix);
+        final int validIsbnLength = ISBN_LENGTH + newIsbnPrefix.length();
+        return barcode.length() == validIsbnLength && barcode.startsWith(newIsbnPrefix);
     }
 
     private void showScanFailedMsg() {

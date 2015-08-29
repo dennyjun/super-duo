@@ -17,6 +17,18 @@
             android:layout_alignParentTop="true"
             android:layout_centerHorizontal="true">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text="@string/new_isbn_prefix" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textAppearance="?android:attr/textAppearanceMedium"
+                android:text=" -" />
+
             <EditText
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
@@ -24,7 +36,7 @@
                 android:minEms="@integer/ean_width"
                 android:id="@+id/ean"
                 android:saveEnabled="true"
-                android:maxLength="@integer/ean_size"
+                android:maxLength="@integer/old_ean_size"
                 android:maxLines="1"
                 android:hint="@string/input_hint"
                 android:paddingRight="20dp"/>
