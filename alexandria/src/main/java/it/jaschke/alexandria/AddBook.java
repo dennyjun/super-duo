@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
+import android.support.v4.content.LocalBroadcastManager;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.util.Patterns;
@@ -197,9 +198,19 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     @Override
     public void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        IntentResult intentResult = IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(intentResult != null) {
-            ean.setText(intentResult.getContents());
+        final IntentResult intentResult =
+                IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
+        if(intentResult != null && intentResult.getContents() != null) {
+            final String barcode = intentResult.getContents();
+            if(barcode.length() != 10 && barcode.length() != 13) {
+                final Intent messageIntent = new Intent(MainActivity.MESSAGE_EVENT);
+                final String msg = getString(R.string.scan_failed_invalid_barcode_msg);
+                messageIntent.putExtra(MainActivity.MESSAGE_KEY, msg);
+                LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+                        .sendBroadcast(messageIntent);
+                return;
+            }
+            ean.setText(barcode);
         }
     }
 }
