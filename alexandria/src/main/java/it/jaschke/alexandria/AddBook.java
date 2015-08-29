@@ -20,6 +20,7 @@ import android.widget.TextView;
 
 import com.google.zxing.integration.android.IntentIntegrator;
 import com.google.zxing.integration.android.IntentResult;
+import com.journeyapps.barcodescanner.CaptureActivity;
 
 import it.jaschke.alexandria.data.AlexandriaContract;
 import it.jaschke.alexandria.services.BookService;
@@ -93,8 +94,12 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.scan_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                // Embedded barcode scanner using https://github.com/journeyapps/zxing-android-embedded/blob/master/zxing-android-embedded/src/com/google/zxing/integration/android/IntentIntegrator.java
-                IntentIntegrator.forSupportFragment(AddBook.this).initiateScan();
+                // Embedded barcode scanner using https://github.com/journeyapps/zxing-android-embedded/blob/master/zxing-android-embedded
+                final IntentIntegrator integrator =
+                        IntentIntegrator.forSupportFragment(AddBook.this);
+                integrator.setCaptureActivity(CaptureActivityAnyOrientation.class);
+                integrator.setOrientationLocked(false);
+                integrator.initiateScan();
             }
         });
 
@@ -220,4 +225,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
                 .sendBroadcast(messageIntent);
     }
+
+    public static class CaptureActivityAnyOrientation extends CaptureActivity {}
 }
