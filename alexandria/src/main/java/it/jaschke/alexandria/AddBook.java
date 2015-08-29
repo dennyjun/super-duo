@@ -38,7 +38,8 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
 
-
+    private static final int OLD_ISBN_LENGTH = 10;
+    private static final int NEW_ISBN_LENGTH = 13;
 
     public AddBook(){
     }
@@ -70,12 +71,13 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
             @Override
             public void afterTextChanged(Editable s) {
-                String ean =s.toString();
+                String ean = s.toString();
                 //catch isbn10 numbers
-                if(ean.length() == 10 && !ean.startsWith("978")){
-                    ean="978" + ean;
+                final String newIsbnPrefix = getString(R.string.new_isbn_prefix);
+                if(ean.length() == OLD_ISBN_LENGTH && !ean.startsWith(newIsbnPrefix)){
+                    ean = newIsbnPrefix + ean;
                 }
-                if(ean.length()<13){
+                if(ean.length() < NEW_ISBN_LENGTH){
                     clearFields();
                     return;
                 }
@@ -128,12 +130,13 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if(ean.getText().length()==0){
+        if(ean.getText().length() == 0){
             return null;
         }
         String eanStr= ean.getText().toString();
-        if(eanStr.length()==10 && !eanStr.startsWith("978")){
-            eanStr="978"+eanStr;
+        final String newIsbnPrefix = getString(R.string.new_isbn_prefix);
+        if(eanStr.length() == OLD_ISBN_LENGTH && !eanStr.startsWith(newIsbnPrefix)){
+            eanStr = newIsbnPrefix + eanStr;
         }
         return new CursorLoader(
                 getActivity(),
@@ -202,15 +205,19 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                 IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
         if(intentResult != null && intentResult.getContents() != null) {
             final String barcode = intentResult.getContents();
-            if(barcode.length() != 10 && barcode.length() != 13) {
-                final Intent messageIntent = new Intent(MainActivity.MESSAGE_EVENT);
-                final String msg = getString(R.string.scan_failed_invalid_barcode_msg);
-                messageIntent.putExtra(MainActivity.MESSAGE_KEY, msg);
-                LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
-                        .sendBroadcast(messageIntent);
-                return;
+            if(barcode.length() == OLD_ISBN_LENGTH || barcode.length() == NEW_ISBN_LENGTH) {
+                ean.setText(barcode);
+            } else {
+                showScanFailedMsg();
             }
-            ean.setText(barcode);
         }
+    }
+
+    private void showScanFailedMsg() {
+        final Intent messageIntent = new Intent(MainActivity.MESSAGE_EVENT);
+        final String msg = getString(R.string.scan_failed_invalid_barcode_msg);
+        messageIntent.putExtra(MainActivity.MESSAGE_KEY, msg);
+        LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
+                .sendBroadcast(messageIntent);
     }
 }
