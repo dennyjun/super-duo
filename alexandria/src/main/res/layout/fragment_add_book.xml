@@ -112,29 +112,50 @@
             android:layout_alignParentLeft="true"
             android:layout_alignParentStart="true">
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="@string/cancel_button"
-                android:layout_weight="1"
+            <!-- Button icons were not aligned with the text making the button confusing.
+                 Left aligned button drawable to the text.
+                 http://stackoverflow.com/questions/14668219/aligning-drawableleft-with-text-of-button -->
+            <FrameLayout
                 style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:id="@+id/delete_button"
-                android:drawableLeft="@drawable/ic_action_discard"
-                android:visibility="invisible"
-                />
+                android:clickable="true"
+                android:visibility="invisible">
+                <TextView
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:clickable="false"
+                    android:drawableLeft="@drawable/ic_action_discard"
+                    android:drawableStart="@drawable/ic_action_discard"
+                    android:focusable="false"
+                    android:text="@string/cancel_button" />
+            </FrameLayout>
 
-            <Button
-                android:layout_width="wrap_content"
-                android:layout_height="fill_parent"
-                android:text="@string/ok_button"
-                android:visibility="invisible"
+            <FrameLayout
+                style="?android:attr/buttonBarButtonStyle"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:id="@+id/save_button"
-                android:drawableLeft="@drawable/ic_action_accept"
-                style="?android:attr/buttonBarButtonStyle"
-                android:layout_gravity="bottom"
-                />
-
+                android:clickable="true"
+                android:visibility="invisible">
+                <TextView
+                    style="?android:attr/buttonBarButtonStyle"
+                    android:layout_width="wrap_content"
+                    android:layout_height="fill_parent"
+                    android:layout_gravity="center"
+                    android:background="@null"
+                    android:clickable="false"
+                    android:drawableLeft="@drawable/ic_action_accept"
+                    android:drawableStart="@drawable/ic_action_accept"
+                    android:focusable="false"
+                    android:text="@string/ok_button" />
+            </FrameLayout>
         </LinearLayout>
 
     </RelativeLayout>
