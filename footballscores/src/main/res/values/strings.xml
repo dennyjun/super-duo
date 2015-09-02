@@ -39,4 +39,10 @@
     <string name="league_desc">League the team plays in</string>
     <string name="matchday_desc">Day of the match</string>
     <string name="about_desc">Description of what this application does</string>
+    <string name="home_crest_desc">Image of home team's crest</string>
+    <string name="home_name_desc">Home team's home name</string>
+    <string name="match_score_desc">Match score</string>
+    <string name="match_time_desc">Match time</string>
+    <string name="away_crest_desc">Image of away team's crest</string>
+    <string name="away_name_desc">Away team's home name</string>
 </resources>
