@@ -38,4 +38,5 @@
 
     <string name="league_desc">League the team plays in</string>
     <string name="matchday_desc">Day of the match</string>
+    <string name="about_desc">Description of what this application does</string>
 </resources>
