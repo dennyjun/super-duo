@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.content.Intent;
 import android.database.Cursor;
 import android.os.Bundle;
+import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.LoaderManager;
 import android.support.v4.content.CursorLoader;
@@ -107,6 +108,11 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             @Override
             public void onClick(View view) {
                 ean.setText("");
+                if(isTablet()) {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.right_container, new Fragment(), Fragment.class.getSimpleName())
+                            .commit();
+                }
             }
         });
 
@@ -158,24 +164,44 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             return;
         }
 
-        String bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
-        ((TextView) rootView.findViewById(R.id.bookTitle)).setText(bookTitle);
+        if(!isTablet()) {
+            String bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
+            ((TextView) rootView.findViewById(R.id.bookTitle)).setText(bookTitle);
 
-        String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
-        ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
+            String bookSubTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.SUBTITLE));
+            ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText(bookSubTitle);
 
-        String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
-        String[] authorsArr = authors.split(",");
-        ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
-        ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",","\n"));
-        String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
-        if(Patterns.WEB_URL.matcher(imgUrl).matches()){
-            new DownloadImage((ImageView) rootView.findViewById(R.id.bookCover)).execute(imgUrl);
-            rootView.findViewById(R.id.bookCover).setVisibility(View.VISIBLE);
+            String authors = data.getString(data.getColumnIndex(AlexandriaContract.AuthorEntry.AUTHOR));
+            String[] authorsArr = authors.split(",");
+            ((TextView) rootView.findViewById(R.id.authors)).setLines(authorsArr.length);
+            ((TextView) rootView.findViewById(R.id.authors)).setText(authors.replace(",", "\n"));
+            String imgUrl = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.IMAGE_URL));
+            if (Patterns.WEB_URL.matcher(imgUrl).matches()) {
+                new DownloadImage((ImageView) rootView.findViewById(R.id.bookCover)).execute(imgUrl);
+                rootView.findViewById(R.id.bookCover).setVisibility(View.VISIBLE);
+            }
+
+            String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
+            ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
+        } else {
+            final Bundle args = new Bundle();
+            final String newIsbnPrefix = getString(R.string.new_isbn_prefix);
+            final String eanStr = newIsbnPrefix + ean.getText().toString();
+            args.putString(BookDetail.EAN_KEY, eanStr);
+            args.putBoolean(BookDetail.HIDE_DELETE_BUTTON_KEY, true);
+
+            final BookDetail fragment = new BookDetail();
+            fragment.setArguments(args);
+
+            new Handler().post(new Runnable() {
+                @Override
+                public void run() {
+                    getActivity().getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.right_container, fragment, BookDetail.class.getSimpleName())
+                            .commit();
+                }
+            });
         }
-
-        String categories = data.getString(data.getColumnIndex(AlexandriaContract.CategoryEntry.CATEGORY));
-        ((TextView) rootView.findViewById(R.id.categories)).setText(categories);
 
         rootView.findViewById(R.id.save_button).setVisibility(View.VISIBLE);
         rootView.findViewById(R.id.delete_button).setVisibility(View.VISIBLE);
@@ -183,7 +209,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
 
     @Override
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
-
     }
 
     private void clearFields(){
@@ -194,6 +219,12 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.bookCover).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.delete_button).setVisibility(View.INVISIBLE);
+        if(isTablet() && getActivity().findViewById(R.id.fullBookTitle) != null) {
+            getActivity().getSupportFragmentManager().beginTransaction()
+                    .replace(R.id.right_container, new Fragment(), Fragment.class.getSimpleName())
+                    .commit();
+            getActivity().setTitle(R.string.scan);
+        }
     }
 
     @Override
@@ -229,6 +260,10 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         messageIntent.putExtra(MainActivity.MESSAGE_KEY, msg);
         LocalBroadcastManager.getInstance(getActivity().getApplicationContext())
                 .sendBroadcast(messageIntent);
+    }
+
+    private boolean isTablet() {
+        return getResources().getBoolean(R.bool.isTablet);
     }
 
     public static class CaptureActivityAnyOrientation extends CaptureActivity {}

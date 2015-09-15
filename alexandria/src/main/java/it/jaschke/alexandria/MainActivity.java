@@ -4,7 +4,6 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
-import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
@@ -64,25 +63,37 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
 
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment nextFragment;
-
+        String tag;
         switch (position){
             default:
             case 0:
                 nextFragment = new ListOfBooks();
+                tag = ListOfBooks.class.getSimpleName();
                 break;
             case 1:
                 nextFragment = new AddBook();
+                tag = AddBook.class.getSimpleName();
                 break;
             case 2:
                 nextFragment = new About();
+                tag = About.class.getSimpleName();
                 break;
 
         }
 
         fragmentManager.beginTransaction()
-                .replace(R.id.container, nextFragment)
+                .replace(R.id.container, nextFragment, tag)
                 .addToBackStack((String) title)
                 .commit();
+
+        if(isTablet()) {
+            if (findViewById(R.id.fullBookTitle) != null) {
+                fragmentManager.beginTransaction()
+                        .replace(R.id.right_container, new Fragment(), Fragment.class.getSimpleName())
+                        .addToBackStack(Fragment.class.getSimpleName())
+                        .commit();
+            }
+        }
     }
 
     public void setTitle(int titleId) {
@@ -144,8 +155,8 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
             id = R.id.right_container;
         }
         getSupportFragmentManager().beginTransaction()
-                .replace(id, fragment)
-                .addToBackStack((String) title)                                                     // back stack name needs to be the current title
+                .replace(id, fragment, BookDetail.class.getSimpleName())
+                .addToBackStack((String) title)
                 .commit();
     }
 
@@ -161,8 +172,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     private boolean isTablet() {
-        return (getApplicationContext().getResources().getConfiguration().screenLayout
-                & Configuration.SCREENLAYOUT_SIZE_MASK) >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+        return getResources().getBoolean(R.bool.isTablet);
     }
 
     @Override
@@ -172,9 +182,29 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         } else {
             final int lastEntry = getSupportFragmentManager().getBackStackEntryCount() - 1;
             title = getSupportFragmentManager().getBackStackEntryAt(lastEntry).getName();
+            if(title.toString().equals(Fragment.class.getSimpleName())) {
+                getSupportFragmentManager().popBackStack();
+                title = getSupportFragmentManager().getBackStackEntryAt(lastEntry - 1).getName();
+            }
+            navigationDrawerFragment.updateSelected(getPosition(title.toString()));
             restoreActionBar();
         }
         super.onBackPressed();
+
+    }
+
+    private int getPosition(final String name) {
+        if(name.equals(getString(R.string.books))
+                || name.equals(getString(R.string.book_detail))) {
+            return 0;
+        } else if(name.equals(getString(R.string.scan))
+                || name.equals(getString(R.string.found_book))) {
+            return 1;
+        } else if(name.equals(getString(R.string.about))) {
+            return 2;
+        } else {
+            return -1;
+        }
     }
 
 

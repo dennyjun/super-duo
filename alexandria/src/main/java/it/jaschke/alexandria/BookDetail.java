@@ -27,6 +27,7 @@ import it.jaschke.alexandria.services.DownloadImage;
 public class BookDetail extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
 
     public static final String EAN_KEY = "EAN";
+    public static final String HIDE_DELETE_BUTTON_KEY = "DEL_BUTTON_KEY";
     private final int LOADER_ID = 10;
     private View rootView;
     private String ean;
@@ -45,24 +46,27 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
     @Override
     public View onCreateView(final LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
+        rootView = inflater.inflate(R.layout.fragment_full_book, container, false);
         Bundle arguments = getArguments();
         if (arguments != null) {
             ean = arguments.getString(BookDetail.EAN_KEY);
             getLoaderManager().initLoader(LOADER_ID, null, this);
-        }
-
-        rootView = inflater.inflate(R.layout.fragment_full_book, container, false);
-        rootView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean);
-                bookIntent.setAction(BookService.DELETE_BOOK);
-                getActivity().startService(bookIntent);
-                getActivity().getSupportFragmentManager().popBackStack();
+            final View deleteButton = rootView.findViewById(R.id.delete_button);
+            if(!arguments.getBoolean(HIDE_DELETE_BUTTON_KEY)) {
+                deleteButton.setOnClickListener(new View.OnClickListener() {
+                    @Override
+                    public void onClick(View view) {
+                        Intent bookIntent = new Intent(getActivity(), BookService.class);
+                        bookIntent.putExtra(BookService.EAN, ean);
+                        bookIntent.setAction(BookService.DELETE_BOOK);
+                        getActivity().startService(bookIntent);
+                        getActivity().getSupportFragmentManager().popBackStack();
+                    }
+                });
+            } else {
+                deleteButton.setVisibility(View.INVISIBLE);
             }
-        });
+        }
         return rootView;
     }
 
@@ -129,6 +133,10 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
     @Override
     public void onAttach(Activity activity) {
         super.onAttach(activity);
-        activity.setTitle(R.string.book_detail);
+        if(getArguments().getBoolean(HIDE_DELETE_BUTTON_KEY)) {
+            activity.setTitle(R.string.found_book);
+        } else {
+            activity.setTitle(R.string.book_detail);
+        }
     }
 }
