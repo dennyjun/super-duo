@@ -27,9 +27,8 @@ public class ScoresAdapter extends CursorAdapter
     public double detail_match_id = 0;
     private static final String FOOTBALL_SCORES_HASHTAG = "#Football_Scores";
 
-    public ScoresAdapter(Context context, Cursor cursor, int flags)
-    {
-        super(context,cursor,flags);
+    public ScoresAdapter(Context context) {
+        super(context, null, 0);
     }
 
     @Override
