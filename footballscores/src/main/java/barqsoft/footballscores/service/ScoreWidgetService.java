@@ -9,6 +9,7 @@ import android.widget.RemoteViewsService;
 
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.R;
@@ -37,8 +38,8 @@ public class ScoreWidgetService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
-            final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-
+            final SimpleDateFormat dateFormat =
+                    new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
             scoresCursor = context.getContentResolver()
                     .query(DatabaseContract.scores_table.buildScoreWithDate(),
                             null,

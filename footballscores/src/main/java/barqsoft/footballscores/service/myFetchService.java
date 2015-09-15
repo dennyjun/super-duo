@@ -19,6 +19,7 @@ import java.net.HttpURLConnection;
 import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 import java.util.TimeZone;
 import java.util.Vector;
 
@@ -207,11 +208,13 @@ public class MyFetchService extends IntentService
                     mDate = match_data.getString(MATCH_DATE);
                     mTime = mDate.substring(mDate.indexOf("T") + 1, mDate.indexOf("Z"));
                     mDate = mDate.substring(0,mDate.indexOf("T"));
-                    SimpleDateFormat match_date = new SimpleDateFormat("yyyy-MM-ddHH:mm:ss");
+                    SimpleDateFormat match_date =
+                            new SimpleDateFormat("yyyy-MM-ddHH:mm:ss", Locale.getDefault());
                     match_date.setTimeZone(TimeZone.getTimeZone("UTC"));
                     try {
                         Date parseddate = match_date.parse(mDate+mTime);
-                        SimpleDateFormat new_date = new SimpleDateFormat("yyyy-MM-dd:HH:mm");
+                        SimpleDateFormat new_date =
+                                new SimpleDateFormat("yyyy-MM-dd:HH:mm", Locale.getDefault());
                         new_date.setTimeZone(TimeZone.getDefault());
                         mDate = new_date.format(parseddate);
                         mTime = mDate.substring(mDate.indexOf(":") + 1);
@@ -220,7 +223,8 @@ public class MyFetchService extends IntentService
                         if(!isReal){
                             //This if statement changes the dummy data's date to match our current date range.
                             Date fragmentdate = new Date(System.currentTimeMillis()+((i-2)*86400000));
-                            SimpleDateFormat mformat = new SimpleDateFormat("yyyy-MM-dd");
+                            SimpleDateFormat mformat =
+                                    new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
                             mDate=mformat.format(fragmentdate);
                         }
                     }
