@@ -22,7 +22,7 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
 {
     public ScoresAdapter mAdapter;
     public static final int SCORES_LOADER = 0;
-    private String[] fragmentdate = new String[1];
+    private final String[] fragmentdate = new String[1];
     private int last_selected_item = -1;
 
     public MainScreenFragment()

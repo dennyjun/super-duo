@@ -23,7 +23,7 @@ public class PagerFragment extends Fragment
 {
     public static final int NUM_PAGES = 5;
     public ViewPager mPagerHandler;
-    private MainScreenFragment[] viewFragments = new MainScreenFragment[5];
+    private final MainScreenFragment[] viewFragments = new MainScreenFragment[5];
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState)
