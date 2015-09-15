@@ -13,7 +13,7 @@ import java.util.Date;
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.R;
 import barqsoft.footballscores.Utilies;
-import barqsoft.footballscores.scoresAdapter;
+import barqsoft.footballscores.ScoresAdapter;
 
 /**
  * Created by Denny on 9/14/2015.
@@ -67,18 +67,18 @@ public class ScoreWidgetService extends RemoteViewsService {
             final RemoteViews remoteViews =
                     new RemoteViews(context.getPackageName(), R.layout.scores_list_item);
             remoteViews.setTextViewText(R.id.home_name,
-                    scoresCursor.getString(scoresAdapter.COL_HOME));
+                    scoresCursor.getString(ScoresAdapter.COL_HOME));
             remoteViews.setTextViewText(R.id.away_name,
-                    scoresCursor.getString(scoresAdapter.COL_AWAY));
+                    scoresCursor.getString(ScoresAdapter.COL_AWAY));
             remoteViews.setTextViewText(R.id.data_textview,
-                    scoresCursor.getString(scoresAdapter.COL_MATCHTIME));
+                    scoresCursor.getString(ScoresAdapter.COL_MATCHTIME));
             remoteViews.setTextViewText(R.id.score_textview, Utilies.getScores(
-                    scoresCursor.getInt(scoresAdapter.COL_HOME_GOALS),
-                    scoresCursor.getInt(scoresAdapter.COL_AWAY_GOALS)));
+                    scoresCursor.getInt(ScoresAdapter.COL_HOME_GOALS),
+                    scoresCursor.getInt(ScoresAdapter.COL_AWAY_GOALS)));
             remoteViews.setImageViewResource(R.id.home_crest, Utilies.getTeamCrestByTeamName(
-                    scoresCursor.getString(scoresAdapter.COL_HOME)));
+                    scoresCursor.getString(ScoresAdapter.COL_HOME)));
             remoteViews.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(
-                    scoresCursor.getString(scoresAdapter.COL_AWAY)));
+                    scoresCursor.getString(ScoresAdapter.COL_AWAY)));
             return remoteViews;
         }
 
