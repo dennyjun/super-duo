@@ -16,8 +16,7 @@ public class ScoreWidget extends AppWidgetProvider {
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
-        Intent service_start = new Intent(context, MyFetchService.class);
-        context.startService(service_start);
+        updateScores(context);
 
         // There may be multiple widgets active, so update all of them
         for (final Integer appWidgetId : appWidgetIds) {
@@ -35,6 +34,11 @@ public class ScoreWidget extends AppWidgetProvider {
     @Override
     public void onDisabled(Context context) {
         // Enter relevant functionality for when the last widget is disabled
+    }
+
+    private void updateScores(Context context) {
+        final Intent intent = new Intent(context, MyFetchService.class);
+        context.startService(intent);
     }
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
