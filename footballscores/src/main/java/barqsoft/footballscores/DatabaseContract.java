@@ -4,14 +4,19 @@ import android.content.ContentResolver;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
+
 /**
  * Created by yehya khaled on 2/25/2015.
  */
-public class DatabaseContract
-{
-    public static final String SCORES_TABLE = "scores_table";
-    public static final class scores_table implements BaseColumns
-    {
+public class DatabaseContract {
+
+    public static final class ScoresTable implements BaseColumns {                                  // Class name should start with a capital letter
+        public static final DateFormat DATE_FORMAT =
+                new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+
         //Table data
         public static final String LEAGUE_COL = "league";
         public static final String DATE_COL = "date";
@@ -32,19 +37,21 @@ public class DatabaseContract
         public static final String CONTENT_ITEM_TYPE =
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH;
 
-        public static Uri buildScoreWithLeague()
-        {
+        public static Uri buildScoreWithLeague() {
             return BASE_CONTENT_URI.buildUpon().appendPath("league").build();
         }
-        public static Uri buildScoreWithId()
-        {
+
+        public static Uri buildScoreWithId() {
             return BASE_CONTENT_URI.buildUpon().appendPath("id").build();
         }
-        public static Uri buildScoreWithDate()
-        {
+
+        public static Uri buildScoreWithDate() {
             return BASE_CONTENT_URI.buildUpon().appendPath("date").build();
         }
     }
+
+    public static final String SCORES_TABLE = "scores_table";
+
     //URI data
     public static final String CONTENT_AUTHORITY = "barqsoft.footballscores";
     public static final String PATH = "scores";

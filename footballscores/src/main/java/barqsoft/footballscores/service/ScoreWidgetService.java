@@ -7,14 +7,12 @@ import android.database.Cursor;
 import android.widget.RemoteViews;
 import android.widget.RemoteViewsService;
 
-import java.text.SimpleDateFormat;
 import java.util.Date;
-import java.util.Locale;
 
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.R;
-import barqsoft.footballscores.Utilies;
 import barqsoft.footballscores.ScoresAdapter;
+import barqsoft.footballscores.Utilies;
 
 /**
  * Created by Denny on 9/14/2015.
@@ -38,13 +36,12 @@ public class ScoreWidgetService extends RemoteViewsService {
 
         @Override
         public void onCreate() {
-            final SimpleDateFormat dateFormat =
-                    new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            final String date = DatabaseContract.ScoresTable.DATE_FORMAT.format(new Date());
             scoresCursor = context.getContentResolver()
-                    .query(DatabaseContract.scores_table.buildScoreWithDate(),
+                    .query(DatabaseContract.ScoresTable.buildScoreWithDate(),
                             null,
                             null,
-                            new String[]{ dateFormat.format(new Date()) },
+                            new String[]{ date },
                             null);
         }
 
@@ -97,7 +94,7 @@ public class ScoreWidgetService extends RemoteViewsService {
         public long getItemId(int position) {
             scoresCursor.moveToPosition(position);
             final int columnIndex =
-                    scoresCursor.getColumnIndex(DatabaseContract.scores_table._ID);
+                    scoresCursor.getColumnIndex(DatabaseContract.ScoresTable._ID);
             return scoresCursor.getLong(columnIndex);
         }
 
