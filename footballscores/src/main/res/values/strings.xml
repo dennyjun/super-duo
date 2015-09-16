@@ -47,4 +47,5 @@
     <string name="away_name_desc">Away team\'s home name</string>
     <string name="appwidget_text">EXAMPLE</string>
     <string name="add_widget">Add widget</string>
+    <string name="no_games_today">No Games Today</string>
 </resources>

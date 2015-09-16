@@ -1,11 +1,22 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent" android:layout_height="match_parent"
-    android:padding="@dimen/widget_margin" android:background="#09C">
-
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="@dimen/widget_margin"
+    android:background="@color/green13">
     <ListView
         android:id="@+id/score_listview"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="center_horizontal" />
 
-</FrameLayout>
+    <TextView
+        android:id="@+id/no_games_textview"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:text="@string/no_games_today"
+        android:textColor="@android:color/black"
+        android:textSize="30dp"
+        android:visibility="gone" />
+</LinearLayout>

@@ -48,6 +48,7 @@ public class ScoreWidget extends AppWidgetProvider {
         final Intent intent = new Intent(context, ScoreWidgetService.class);
         intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
         views.setRemoteAdapter(appWidgetId, R.id.score_listview, intent);
+        views.setEmptyView(R.id.score_listview, R.id.no_games_textview);
         // Instruct the widget manager to update the widget
         appWidgetManager.updateAppWidget(appWidgetId, views);
     }
