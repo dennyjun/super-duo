@@ -8,6 +8,6 @@ This is a book list and barcode scanner application.
 This application tracks current and future football (soccer) matches.
 
 # Configuration
-An API key for Football Scores is NOT required but HIGHLY RECOMMENDED as the number of requests the application makes will be set to 50 requests a day in comparison to 50 requests a minute with the API key. You can get a free API key from: http://api.football-data.org/register. Replace the following variable in the strings.xml file with the API key:
+An API key for Football Scores is NOT required but HIGHLY RECOMMENDED as the number of requests the application makes will be set to 50 requests a day in comparison to 50 requests a minute with the API key. You can get a free API key from: http://api.football-data.org/register. Add the API key to the following variable in the strings.xml file:
      
        <string name="api_key"></string>
