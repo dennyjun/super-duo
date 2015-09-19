@@ -12,7 +12,7 @@ import java.util.Date;
 import barqsoft.footballscores.DatabaseContract;
 import barqsoft.footballscores.R;
 import barqsoft.footballscores.ScoresAdapter;
-import barqsoft.footballscores.Utilies;
+import barqsoft.footballscores.Utilities;
 
 /**
  * Created by Denny on 9/14/2015.
@@ -70,12 +70,12 @@ public class ScoreWidgetService extends RemoteViewsService {
                     scoresCursor.getString(ScoresAdapter.COL_AWAY));
             remoteViews.setTextViewText(R.id.data_textview,
                     scoresCursor.getString(ScoresAdapter.COL_MATCHTIME));
-            remoteViews.setTextViewText(R.id.score_textview, Utilies.getScores(
+            remoteViews.setTextViewText(R.id.score_textview, Utilities.getScores(
                     scoresCursor.getInt(ScoresAdapter.COL_HOME_GOALS),
                     scoresCursor.getInt(ScoresAdapter.COL_AWAY_GOALS)));
-            remoteViews.setImageViewResource(R.id.home_crest, Utilies.getTeamCrestByTeamName(
+            remoteViews.setImageViewResource(R.id.home_crest, Utilities.getTeamCrestByTeamName(
                     scoresCursor.getString(ScoresAdapter.COL_HOME)));
-            remoteViews.setImageViewResource(R.id.away_crest, Utilies.getTeamCrestByTeamName(
+            remoteViews.setImageViewResource(R.id.away_crest, Utilities.getTeamCrestByTeamName(
                     scoresCursor.getString(ScoresAdapter.COL_AWAY)));
             return remoteViews;
         }
