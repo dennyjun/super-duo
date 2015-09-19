@@ -20,7 +20,7 @@ import barqsoft.footballscores.service.MyFetchService;
  */
 public class MainScreenFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
 {
-    public ScoresAdapter mAdapter;
+    public ScoresAdapter adapter;
     public static final int SCORES_LOADER = 0;
     private final String[] fragmentDate = new String[1];
 
@@ -28,11 +28,12 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     {
     }
 
-    private void update_scores()
+    private void updateScores()
     {
-        Intent service_start = new Intent(getActivity(), MyFetchService.class);
-        getActivity().startService(service_start);
+        final Intent serviceStart = new Intent(getActivity(), MyFetchService.class);
+        getActivity().startService(serviceStart);
     }
+
     public void setFragmentDate(String date)
     {
         fragmentDate[0] = date;
@@ -40,22 +41,20 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
-        update_scores();
-        View rootView = inflater.inflate(R.layout.fragment_main, container, false);
-        final ListView score_list = (ListView) rootView.findViewById(R.id.scores_list);
-        mAdapter = new ScoresAdapter(getActivity());
-        score_list.setAdapter(mAdapter);
-        getLoaderManager().initLoader(SCORES_LOADER,null,this);
-        mAdapter.detail_match_id = MainActivity.selectedMatchId;
-        score_list.setOnItemClickListener(new AdapterView.OnItemClickListener()
-        {
+        updateScores();
+        final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
+        final ListView scoreList = (ListView) rootView.findViewById(R.id.scores_list);
+        adapter = new ScoresAdapter(getActivity());
+        scoreList.setAdapter(adapter);
+        getLoaderManager().initLoader(SCORES_LOADER, null, this);
+        adapter.detail_match_id = MainActivity.selectedMatchId;
+        scoreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onItemClick(AdapterView<?> parent, View view, int position, long id)
-            {
-                ViewHolder selected = (ViewHolder) view.getTag();
-                mAdapter.detail_match_id = selected.match_id;
+            public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
+                final ViewHolder selected = (ViewHolder) view.getTag();
+                adapter.detail_match_id = selected.match_id;
                 MainActivity.selectedMatchId = (int) selected.match_id;
-                mAdapter.notifyDataSetChanged();
+                adapter.notifyDataSetChanged();
             }
         });
         return rootView;
@@ -65,7 +64,7 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     public Loader<Cursor> onCreateLoader(int i, Bundle bundle)
     {
         return new CursorLoader(getActivity(), DatabaseContract.ScoresTable.buildScoreWithDate(),
-                null,null, fragmentDate,null);
+                null,null, fragmentDate, null);
     }
 
     @Override
@@ -89,14 +88,14 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
             cursor.moveToNext();
         }
         //Log.v(FetchScoreTask.LOG_TAG,"Loader query: " + String.valueOf(i));
-        mAdapter.swapCursor(cursor);
-        //mAdapter.notifyDataSetChanged();
+        adapter.swapCursor(cursor);
+        //adapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader)
     {
-        mAdapter.swapCursor(null);
+        adapter.swapCursor(null);
     }
 
 
