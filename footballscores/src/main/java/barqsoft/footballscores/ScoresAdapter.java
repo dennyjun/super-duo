@@ -45,18 +45,18 @@ public class ScoresAdapter extends CursorAdapter {                              
     @Override
     public void bindView(View view, final Context context, Cursor cursor) {
         final ViewHolder holder = (ViewHolder) view.getTag();
-        holder.home_name.setText(cursor.getString(COL_HOME));
-        holder.away_name.setText(cursor.getString(COL_AWAY));
+        holder.homeName.setText(cursor.getString(COL_HOME));
+        holder.awayName.setText(cursor.getString(COL_AWAY));
         holder.date.setText(cursor.getString(COL_MATCHTIME));
         holder.score.setText(
                 Utilities.getScores(cursor.getInt(COL_HOME_GOALS), cursor.getInt(COL_AWAY_GOALS)));
         holder.match_id = cursor.getDouble(COL_ID);
-        holder.home_crest.setImageResource(Utilities.getTeamCrestByTeamName(
+        holder.homeCrest.setImageResource(Utilities.getTeamCrestByTeamName(
                 cursor.getString(COL_HOME)));
-        holder.away_crest.setImageResource(Utilities.getTeamCrestByTeamName(
+        holder.awayCrest.setImageResource(Utilities.getTeamCrestByTeamName(
                 cursor.getString(COL_AWAY)
         ));
-        //Log.v(FetchScoreTask.LOG_TAG,holder.home_name.getText() + " Vs. " + holder.away_name.getText() +" id " + String.valueOf(holder.match_id));
+        //Log.v(FetchScoreTask.LOG_TAG,holder.homeName.getText() + " Vs. " + holder.awayName.getText() +" id " + String.valueOf(holder.match_id));
         //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(detail_match_id));
         LayoutInflater vi = (LayoutInflater) context.getApplicationContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
@@ -77,8 +77,8 @@ public class ScoresAdapter extends CursorAdapter {                              
                 @Override
                 public void onClick(View v) {
                     //add Share Action
-                    context.startActivity(createShareForecastIntent(holder.home_name.getText() + " "
-                            + holder.score.getText() + " " + holder.away_name.getText() + " "));
+                    context.startActivity(createShareForecastIntent(holder.homeName.getText() + " "
+                            + holder.score.getText() + " " + holder.awayName.getText() + " "));
                 }
             });
         } else {
