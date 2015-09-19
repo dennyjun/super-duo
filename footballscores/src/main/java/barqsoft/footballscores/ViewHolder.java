@@ -14,7 +14,7 @@ public class ViewHolder {
     public final TextView date;
     public final ImageView homeCrest;
     public final ImageView awayCrest;
-    public double match_id;
+    public double matchId;
 
     public ViewHolder(View view) {
         homeName  = (TextView) view.findViewById(R.id.home_name);

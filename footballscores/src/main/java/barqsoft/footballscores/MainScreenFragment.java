@@ -52,8 +52,8 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final ViewHolder selected = (ViewHolder) view.getTag();
-                adapter.detail_match_id = selected.match_id;
-                MainActivity.selectedMatchId = (int) selected.match_id;
+                adapter.detail_match_id = selected.matchId;
+                MainActivity.selectedMatchId = (int) selected.matchId;
                 adapter.notifyDataSetChanged();
             }
         });
