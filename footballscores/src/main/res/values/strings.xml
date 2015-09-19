@@ -56,4 +56,11 @@
     <string name="fragment_prefix_msg">"fragment: "</string>
     <string name="selected_id_prefix_msg">"selected id: "</string>
     <string name="unknown_uri_prefix_msg">Unknown uri :</string>
+    <string name="match_day_group_stages">Group Stages, Matchday : 6</string>
+    <string name="match_day_first_knockout_round">First Knockout round</string>
+    <string name="match_day_quarter_final">QuarterFinal</string>
+    <string name="match_day_semi_final">SemiFinal</string>
+    <string name="match_day_finals">Final</string>
+    <string name="match_day_normal_prefix">"Matchday : "</string>
+    <string name="not_known_league_msg">Not known League Please report</string>
 </resources>
