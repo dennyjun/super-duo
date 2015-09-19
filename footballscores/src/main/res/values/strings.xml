@@ -55,4 +55,5 @@
     <string name="will_retrieve_msg">will retrieve</string>
     <string name="fragment_prefix_msg">"fragment: "</string>
     <string name="selected_id_prefix_msg">"selected id: "</string>
+    <string name="unknown_uri_prefix_msg">Unknown uri :</string>
 </resources>

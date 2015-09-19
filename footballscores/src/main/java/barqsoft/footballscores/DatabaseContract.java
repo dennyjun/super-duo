@@ -17,7 +17,7 @@ public class DatabaseContract {
         public static final DateFormat DATE_FORMAT =
                 new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
-        private static final String ID_URI_PATH = "id";
+        public static final String ID_URI_PATH = "id";
 
         //Table data
         public static final String LEAGUE_COL = "league";

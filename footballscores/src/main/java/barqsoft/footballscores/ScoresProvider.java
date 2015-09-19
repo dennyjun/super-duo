@@ -33,9 +33,9 @@ public class ScoresProvider extends ContentProvider
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
         final String authority = DatabaseContract.BASE_CONTENT_URI.toString();
         matcher.addURI(authority, null , MATCHES);
-        matcher.addURI(authority, "league" , MATCHES_WITH_LEAGUE);
-        matcher.addURI(authority, "id" , MATCHES_WITH_ID);
-        matcher.addURI(authority, "date" , MATCHES_WITH_DATE);
+        matcher.addURI(authority, DatabaseContract.ScoresTable.LEAGUE_COL , MATCHES_WITH_LEAGUE);
+        matcher.addURI(authority, DatabaseContract.ScoresTable.ID_URI_PATH , MATCHES_WITH_ID);
+        matcher.addURI(authority, DatabaseContract.ScoresTable.DATE_COL , MATCHES_WITH_DATE);
         return matcher;
     }
 
@@ -89,7 +89,8 @@ public class ScoresProvider extends ContentProvider
             case MATCHES_WITH_DATE:
                 return DatabaseContract.ScoresTable.CONTENT_TYPE;
             default:
-                throw new UnsupportedOperationException("Unknown uri :" + uri );
+                throw new UnsupportedOperationException(
+                        getContext().getString(R.string.unknown_uri_prefix_msg) + uri);
         }
     }
 
@@ -146,7 +147,8 @@ public class ScoresProvider extends ContentProvider
                         null,
                         sortOrder);
                 break;
-            default: throw new UnsupportedOperationException("Unknown Uri" + uri);
+            default: throw new UnsupportedOperationException(
+                    getContext().getString(R.string.unknown_uri_prefix_msg) + uri);
         }
         retCursor.setNotificationUri(getContext().getContentResolver(),uri);
         return retCursor;
