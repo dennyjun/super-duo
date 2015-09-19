@@ -39,7 +39,7 @@ public class PagerFragment extends Fragment
                     DatabaseContract.ScoresTable.DATE_FORMAT.format(fragmentDate));
         }
         mPagerHandler.setAdapter(pagerAdapter);
-        mPagerHandler.setCurrentItem(MainActivity.current_fragment);
+        mPagerHandler.setCurrentItem(MainActivity.currentFragment);
         return rootView;
     }
 
