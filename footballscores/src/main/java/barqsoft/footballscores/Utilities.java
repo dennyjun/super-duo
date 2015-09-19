@@ -3,16 +3,16 @@ package barqsoft.footballscores;
 /**
  * Created by yehya khaled on 3/3/2015.
  */
-public class Utilies
+public class Utilities                                                                              // Corrected spelling for Utilities
 {
     public static final int SERIE_A = 357;
     public static final int PREMIER_LEGAUE = 354;
     public static final int CHAMPIONS_LEAGUE = 362;
     public static final int PRIMERA_DIVISION = 358;
     public static final int BUNDESLIGA = 351;
-    public static String getLeague(int league_num)
+    public static String getLeague(int leagueNum)
     {
-        switch (league_num)
+        switch (leagueNum)
         {
             case SERIE_A : return "Seria A";
             case PREMIER_LEGAUE : return "Premier League";
@@ -22,23 +22,23 @@ public class Utilies
             default: return "Not known League Please report";
         }
     }
-    public static String getMatchDay(int match_day,int league_num)
+    public static String getMatchDay(int matchDay, int leagueNum)
     {
-        if(league_num == CHAMPIONS_LEAGUE)
+        if(leagueNum == CHAMPIONS_LEAGUE)
         {
-            if (match_day <= 6)
+            if (matchDay <= 6)
             {
                 return "Group Stages, Matchday : 6";
             }
-            else if(match_day == 7 || match_day == 8)
+            else if(matchDay == 7 || matchDay == 8)
             {
                 return "First Knockout round";
             }
-            else if(match_day == 9 || match_day == 10)
+            else if(matchDay == 9 || matchDay == 10)
             {
                 return "QuarterFinal";
             }
-            else if(match_day == 11 || match_day == 12)
+            else if(matchDay == 11 || matchDay == 12)
             {
                 return "SemiFinal";
             }
@@ -49,26 +49,26 @@ public class Utilies
         }
         else
         {
-            return "Matchday : " + String.valueOf(match_day);
+            return "Matchday : " + String.valueOf(matchDay);
         }
     }
 
-    public static String getScores(int home_goals,int awaygoals)
+    public static String getScores(int homeGoals, int awaygoals)
     {
-        if(home_goals < 0 || awaygoals < 0)
+        if(homeGoals < 0 || awaygoals < 0)
         {
             return " - ";
         }
         else
         {
-            return String.valueOf(home_goals) + " - " + String.valueOf(awaygoals);
+            return String.valueOf(homeGoals) + " - " + String.valueOf(awaygoals);
         }
     }
 
-    public static int getTeamCrestByTeamName (String teamname)
+    public static int getTeamCrestByTeamName (String teamName)
     {
-        if (teamname==null){return R.drawable.no_icon;}
-        switch (teamname)
+        if (teamName==null){return R.drawable.no_icon;}
+        switch (teamName)
         { //This is the set of icons that are currently in the app. Feel free to find and add more
             //as you go.
             case "Arsenal London FC" : return R.drawable.arsenal;

@@ -49,11 +49,11 @@ public class ScoresAdapter extends CursorAdapter {                              
         holder.away_name.setText(cursor.getString(COL_AWAY));
         holder.date.setText(cursor.getString(COL_MATCHTIME));
         holder.score.setText(
-                Utilies.getScores(cursor.getInt(COL_HOME_GOALS), cursor.getInt(COL_AWAY_GOALS)));
+                Utilities.getScores(cursor.getInt(COL_HOME_GOALS), cursor.getInt(COL_AWAY_GOALS)));
         holder.match_id = cursor.getDouble(COL_ID);
-        holder.home_crest.setImageResource(Utilies.getTeamCrestByTeamName(
+        holder.home_crest.setImageResource(Utilities.getTeamCrestByTeamName(
                 cursor.getString(COL_HOME)));
-        holder.away_crest.setImageResource(Utilies.getTeamCrestByTeamName(
+        holder.away_crest.setImageResource(Utilities.getTeamCrestByTeamName(
                 cursor.getString(COL_AWAY)
         ));
         //Log.v(FetchScoreTask.LOG_TAG,holder.home_name.getText() + " Vs. " + holder.away_name.getText() +" id " + String.valueOf(holder.match_id));
@@ -68,10 +68,10 @@ public class ScoresAdapter extends CursorAdapter {                              
             container.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT
                     , ViewGroup.LayoutParams.MATCH_PARENT));
             final TextView matchDay = (TextView) v.findViewById(R.id.matchday_textview);
-            matchDay.setText(Utilies.getMatchDay(cursor.getInt(COL_MATCHDAY),
+            matchDay.setText(Utilities.getMatchDay(cursor.getInt(COL_MATCHDAY),
                     cursor.getInt(COL_LEAGUE)));
             final TextView league = (TextView) v.findViewById(R.id.league_textview);
-            league.setText(Utilies.getLeague(cursor.getInt(COL_LEAGUE)));
+            league.setText(Utilities.getLeague(cursor.getInt(COL_LEAGUE)));
             final Button shareButton = (Button) v.findViewById(R.id.share_button);
             shareButton.setOnClickListener(new View.OnClickListener() {
                 @Override
