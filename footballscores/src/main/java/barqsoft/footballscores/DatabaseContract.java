@@ -17,6 +17,8 @@ public class DatabaseContract {
         public static final DateFormat DATE_FORMAT =
                 new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
 
+        private static final String ID_URI_PATH = "id";
+
         //Table data
         public static final String LEAGUE_COL = "league";
         public static final String DATE_COL = "date";
@@ -38,15 +40,15 @@ public class DatabaseContract {
                 ContentResolver.CURSOR_ITEM_BASE_TYPE + "/" + CONTENT_AUTHORITY + "/" + PATH;
 
         public static Uri buildScoreWithLeague() {
-            return BASE_CONTENT_URI.buildUpon().appendPath("league").build();
+            return BASE_CONTENT_URI.buildUpon().appendPath(LEAGUE_COL).build();
         }
 
         public static Uri buildScoreWithId() {
-            return BASE_CONTENT_URI.buildUpon().appendPath("id").build();
+            return BASE_CONTENT_URI.buildUpon().appendPath(ID_URI_PATH).build();
         }
 
         public static Uri buildScoreWithDate() {
-            return BASE_CONTENT_URI.buildUpon().appendPath("date").build();
+            return BASE_CONTENT_URI.buildUpon().appendPath(DATE_COL).build();
         }
     }
 
