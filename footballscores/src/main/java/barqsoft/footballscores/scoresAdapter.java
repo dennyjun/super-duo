@@ -13,7 +13,7 @@ import android.widget.TextView;
 /**
  * Created by yehya khaled on 2/26/2015.
  */
-public class ScoresAdapter extends CursorAdapter
+public class ScoresAdapter extends CursorAdapter                                                    // Class name should start with a capital letter
 {
     public static final int COL_HOME = 3;
     public static final int COL_AWAY = 4;
