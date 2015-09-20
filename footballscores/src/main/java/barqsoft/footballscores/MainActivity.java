@@ -8,16 +8,15 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
 
-public class MainActivity extends ActionBarActivity
-{
-    public static int selectedMatchId;
-    public static int currentFragment = 2;
+public class MainActivity extends ActionBarActivity {
     public static final String LOG_TAG = MainActivity.class.getSimpleName();
-    private final String saveTag = "Save Test";
-    private PagerFragment myMain;
     private static final String MY_MAIN_FRAGMENT_KEY = "myMain";
     private static final String CURRENT_PAGER_KEY = "Pager_Current";
     private static final String SELECTED_MATCH_KEY = "Selected_match";
+    public static int selectedMatchId;
+    public static int currentFragment = 2;
+    private final String saveTag = "Save Test";
+    private PagerFragment myMain;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,9 +47,8 @@ public class MainActivity extends ActionBarActivity
         int id = item.getItemId();
 
         //noinspection SimplifiableIfStatement
-        if (id == R.id.action_about)
-        {
-            final Intent startAbout = new Intent(this,AboutActivity.class);
+        if (id == R.id.action_about) {
+            final Intent startAbout = new Intent(this, AboutActivity.class);
             startActivity(startAbout);
             return true;
         }
@@ -59,8 +57,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    protected void onSaveInstanceState(Bundle outState)
-    {
+    protected void onSaveInstanceState(Bundle outState) {
         final int currentPager = myMain.mPagerHandler.getCurrentItem();
         Log.v(saveTag, getString(R.string.will_save_msg));
         Log.v(saveTag, getString(R.string.fragment_prefix_msg) + String.valueOf(currentPager));
@@ -72,8 +69,7 @@ public class MainActivity extends ActionBarActivity
     }
 
     @Override
-    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState)
-    {
+    protected void onRestoreInstanceState(@NonNull Bundle savedInstanceState) {
         currentFragment = savedInstanceState.getInt(CURRENT_PAGER_KEY);
         selectedMatchId = savedInstanceState.getInt(SELECTED_MATCH_KEY);
         Log.v(saveTag, getString(R.string.will_retrieve_msg));

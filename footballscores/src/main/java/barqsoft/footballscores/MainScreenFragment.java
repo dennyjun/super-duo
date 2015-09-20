@@ -18,26 +18,23 @@ import barqsoft.footballscores.service.MyFetchService;
 /**
  * A placeholder fragment containing a simple view.
  */
-public class MainScreenFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor>
-{
-    public ScoresAdapter adapter;
+public class MainScreenFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final int SCORES_LOADER = 0;
     private final String[] fragmentDate = new String[1];
+    public ScoresAdapter adapter;
 
-    public MainScreenFragment()
-    {
+    public MainScreenFragment() {
     }
 
-    private void updateScores()
-    {
+    private void updateScores() {
         final Intent serviceStart = new Intent(getActivity(), MyFetchService.class);
         getActivity().startService(serviceStart);
     }
 
-    public void setFragmentDate(String date)
-    {
+    public void setFragmentDate(String date) {
         fragmentDate[0] = date;
     }
+
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
@@ -61,15 +58,13 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     }
 
     @Override
-    public Loader<Cursor> onCreateLoader(int i, Bundle bundle)
-    {
+    public Loader<Cursor> onCreateLoader(int i, Bundle bundle) {
         return new CursorLoader(getActivity(), DatabaseContract.ScoresTable.buildScoreWithDate(),
-                null,null, fragmentDate, null);
+                null, null, fragmentDate, null);
     }
 
     @Override
-    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor)
-    {
+    public void onLoadFinished(Loader<Cursor> cursorLoader, Cursor cursor) {
         //Log.v(FetchScoreTask.LOG_TAG,"loader finished");
         //cursor.moveToFirst();
         /*
@@ -82,8 +77,7 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
 
         int i = 0;
         cursor.moveToFirst();
-        while (!cursor.isAfterLast())
-        {
+        while (!cursor.isAfterLast()) {
             i++;
             cursor.moveToNext();
         }
@@ -93,8 +87,7 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
     }
 
     @Override
-    public void onLoaderReset(Loader<Cursor> cursorLoader)
-    {
+    public void onLoaderReset(Loader<Cursor> cursorLoader) {
         adapter.swapCursor(null);
     }
 

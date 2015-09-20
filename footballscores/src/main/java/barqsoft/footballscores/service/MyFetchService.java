@@ -76,8 +76,7 @@ public class MyFetchService extends IntentService {
     final String AWAY_GOALS = "goalsAwayTeam";
     final String MATCH_DAY = "matchday";
 
-    public MyFetchService()
-    {
+    public MyFetchService() {
         super(LOG_TAG);
     }
 
@@ -87,7 +86,7 @@ public class MyFetchService extends IntentService {
         getData(TIME_FRAME_P2);
     }
 
-    private void getData (String timeFrame) {
+    private void getData(String timeFrame) {
         //final String QUERY_MATCH_DAY = "matchday";
         final Uri fetchBuild = Uri.parse(BASE_URL).buildUpon().
                 appendQueryParameter(QUERY_TIME_FRAME, timeFrame).build();
@@ -127,7 +126,7 @@ public class MyFetchService extends IntentService {
         } catch (Exception e) {
             Log.e(LOG_TAG, e.getMessage());
         } finally {
-            if(connection != null) {
+            if (connection != null) {
                 connection.disconnect();
             }
             if (reader != null) {
@@ -155,12 +154,12 @@ public class MyFetchService extends IntentService {
                 //Could not Connect
                 Log.d(LOG_TAG, getString(R.string.could_not_connect_to_server_msg));
             }
-        }
-        catch(Exception e) {
-            Log.e(LOG_TAG,e.getMessage());
+        } catch (Exception e) {
+            Log.e(LOG_TAG, e.getMessage());
         }
     }
-    private void processJSONdata (String jsonData, Context context, boolean isReal) {
+
+    private void processJSONdata(String jsonData, Context context, boolean isReal) {
         //Match data
         String league;                                                                              // variable name should not be capitalized
         String date;
@@ -176,8 +175,8 @@ public class MyFetchService extends IntentService {
             final JSONArray matches = new JSONObject(jsonData).getJSONArray(FIXTURES);
 
             //ContentValues to be inserted
-            final Vector<ContentValues> values = new Vector <> (matches.length());
-            for(int i = 0; i < matches.length(); i++) {
+            final Vector<ContentValues> values = new Vector<>(matches.length());
+            for (int i = 0; i < matches.length(); i++) {
                 final JSONObject matchData = matches.getJSONObject(i);
                 league = matchData.getJSONObject(LINKS).getJSONObject(SOCCER_SEASON).
                         getString(JSON_NAME_HREF);
@@ -186,18 +185,17 @@ public class MyFetchService extends IntentService {
                 //add leagues here in order to have them be added to the DB.
                 // If you are finding no data in the app, check that this contains all the leagues.
                 // If it doesn't, that can cause an empty DB, bypassing the dummy data routine.
-                if(     league.equals(PREMIER_LEAGUE)      ||
-                        league.equals(SERIE_A)             ||
-                        league.equals(BUNDESLIGA1)         ||
-                        league.equals(BUNDESLIGA2)         ||
-                        league.equals(PRIMERA_DIVISION)     )
-                {
+                if (league.equals(PREMIER_LEAGUE) ||
+                        league.equals(SERIE_A) ||
+                        league.equals(BUNDESLIGA1) ||
+                        league.equals(BUNDESLIGA2) ||
+                        league.equals(PRIMERA_DIVISION)) {
                     matchId = matchData.getJSONObject(LINKS).getJSONObject(SELF).
                             getString(JSON_NAME_HREF);
                     matchId = matchId.replace(MATCH_LINK, "");
-                    if(!isReal) {
+                    if (!isReal) {
                         //This if statement changes the match ID of the dummy data so that it all goes into the database
-                        matchId=matchId+Integer.toString(i);
+                        matchId = matchId + Integer.toString(i);
                     }
 
                     date = matchData.getString(MATCH_DATE);
@@ -210,15 +208,14 @@ public class MyFetchService extends IntentService {
                         time = HOUR_MIN_FORMAT.format(parsedDate);
                         date = DatabaseContract.ScoresTable.DATE_FORMAT.format(parsedDate);
 
-                        if(!isReal) {
+                        if (!isReal) {
                             //This if statement changes the dummy data's date to match our current date range.
                             final Date fragmentDate =
                                     new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
                             date = DatabaseContract.ScoresTable.DATE_FORMAT.format(fragmentDate);
                         }
-                    }
-                    catch (Exception e) {
-                        Log.e(LOG_TAG,e.getMessage());                                              // Removed redundant error message
+                    } catch (Exception e) {
+                        Log.e(LOG_TAG, e.getMessage());                                              // Removed redundant error message
                     }
                     home = matchData.getString(HOME_TEAM);
                     away = matchData.getString(AWAY_TEAM);
@@ -252,11 +249,10 @@ public class MyFetchService extends IntentService {
             final ContentValues[] insertData = new ContentValues[values.size()];
             values.toArray(insertData);
             inserted_data = context.getContentResolver().bulkInsert(
-                    DatabaseContract.BASE_CONTENT_URI,insertData);
+                    DatabaseContract.BASE_CONTENT_URI, insertData);
 
             //Log.v(LOG_TAG,"Succesfully Inserted : " + String.valueOf(inserted_data));
-        }
-        catch (JSONException e) {
+        } catch (JSONException e) {
             Log.e(LOG_TAG, e.getMessage());
         }
 

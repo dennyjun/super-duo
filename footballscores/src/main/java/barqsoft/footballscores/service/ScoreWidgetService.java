@@ -41,7 +41,7 @@ public class ScoreWidgetService extends RemoteViewsService {
                     .query(DatabaseContract.ScoresTable.buildScoreWithDate(),
                             null,
                             null,
-                            new String[]{ date },
+                            new String[]{date},
                             null);
         }
 

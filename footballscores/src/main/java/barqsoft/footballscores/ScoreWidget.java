@@ -6,13 +6,25 @@ import android.content.Context;
 import android.content.Intent;
 import android.widget.RemoteViews;
 
-import barqsoft.footballscores.service.ScoreWidgetService;
 import barqsoft.footballscores.service.MyFetchService;
+import barqsoft.footballscores.service.ScoreWidgetService;
 
 /**
  * Implementation of App Widget functionality.
  */
 public class ScoreWidget extends AppWidgetProvider {
+
+    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
+                                int appWidgetId) {
+        // Construct the RemoteViews object
+        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.score_widget);
+        final Intent intent = new Intent(context, ScoreWidgetService.class);
+        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
+        views.setRemoteAdapter(appWidgetId, R.id.score_listview, intent);
+        views.setEmptyView(R.id.score_listview, R.id.no_games_textview);
+        // Instruct the widget manager to update the widget
+        appWidgetManager.updateAppWidget(appWidgetId, views);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -24,7 +36,6 @@ public class ScoreWidget extends AppWidgetProvider {
         }
         super.onUpdate(context, appWidgetManager, appWidgetIds);
     }
-
 
     @Override
     public void onEnabled(Context context) {
@@ -39,18 +50,6 @@ public class ScoreWidget extends AppWidgetProvider {
     private void updateScores(Context context) {
         final Intent intent = new Intent(context, MyFetchService.class);
         context.startService(intent);
-    }
-
-    static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,
-                                int appWidgetId) {
-        // Construct the RemoteViews object
-        final RemoteViews views = new RemoteViews(context.getPackageName(), R.layout.score_widget);
-        final Intent intent = new Intent(context, ScoreWidgetService.class);
-        intent.putExtra(AppWidgetManager.EXTRA_APPWIDGET_ID, appWidgetId);
-        views.setRemoteAdapter(appWidgetId, R.id.score_listview, intent);
-        views.setEmptyView(R.id.score_listview, R.id.no_games_textview);
-        // Instruct the widget manager to update the widget
-        appWidgetManager.updateAppWidget(appWidgetId, views);
     }
 }
 

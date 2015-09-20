@@ -23,10 +23,9 @@ public class ScoresAdapter extends CursorAdapter {                              
     public static final int COL_MATCHDAY = 9;
     public static final int COL_ID = 8;
     public static final int COL_MATCHTIME = 2;
-    public double detail_match_id = 0;
     private static final String FOOTBALL_SCORES_HASHTAG = "#Football_Scores";
-
     private static final String PLAIN_TEXT_TYPE = "text/plain";
+    public double detail_match_id = 0;
 
     public ScoresAdapter(Context context) {
         super(context, null, 0);
@@ -62,7 +61,7 @@ public class ScoresAdapter extends CursorAdapter {                              
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View v = vi.inflate(R.layout.detail_fragment, null);
         final ViewGroup container = (ViewGroup) view.findViewById(R.id.details_fragment_container);
-        if(holder.matchId == detail_match_id) {
+        if (holder.matchId == detail_match_id) {
             //Log.v(FetchScoreTask.LOG_TAG,"will insert extraView");
 
             container.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT

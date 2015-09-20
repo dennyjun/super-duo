@@ -13,6 +13,12 @@ import java.util.Locale;
  */
 public class DatabaseContract {
 
+    public static final String SCORES_TABLE = "scores_table";
+    //URI data
+    public static final String CONTENT_AUTHORITY = "barqsoft.footballscores";
+    public static final String PATH = "scores";
+    public static final Uri BASE_CONTENT_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
+
     public static final class ScoresTable implements BaseColumns {                                  // Class name should start with a capital letter
         public static final DateFormat DATE_FORMAT =
                 new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
@@ -31,7 +37,7 @@ public class DatabaseContract {
         public static final String MATCH_DAY = "match_day";
 
         //public static Uri SCORES_CONTENT_URI = BASE_CONTENT_URI.buildUpon().appendPath(PATH)
-                //.build();
+        //.build();
 
         //Types
         public static final String CONTENT_TYPE =
@@ -51,11 +57,4 @@ public class DatabaseContract {
             return BASE_CONTENT_URI.buildUpon().appendPath(DATE_COL).build();
         }
     }
-
-    public static final String SCORES_TABLE = "scores_table";
-
-    //URI data
-    public static final String CONTENT_AUTHORITY = "barqsoft.footballscores";
-    public static final String PATH = "scores";
-    public static final Uri BASE_CONTENT_URI = Uri.parse("content://"+CONTENT_AUTHORITY);
 }
