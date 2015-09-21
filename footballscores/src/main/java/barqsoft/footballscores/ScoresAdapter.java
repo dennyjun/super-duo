@@ -25,7 +25,7 @@ public class ScoresAdapter extends CursorAdapter {                              
     public static final int COL_MATCHTIME = 2;
     private static final String FOOTBALL_SCORES_HASHTAG = "#Football_Scores";
     private static final String PLAIN_TEXT_TYPE = "text/plain";
-    public double detail_match_id = 0;
+    public double detailMatchId = 0;                                                                // remove underscores in regular variable name
 
     public ScoresAdapter(Context context) {
         super(context, null, 0);
@@ -56,12 +56,12 @@ public class ScoresAdapter extends CursorAdapter {                              
                 cursor.getString(COL_AWAY)
         ));
         //Log.v(FetchScoreTask.LOG_TAG,holder.homeName.getText() + " Vs. " + holder.awayName.getText() +" id " + String.valueOf(holder.matchId));
-        //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(detail_match_id));
+        //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(detailMatchId));
         LayoutInflater vi = (LayoutInflater) context.getApplicationContext()
                 .getSystemService(Context.LAYOUT_INFLATER_SERVICE);
         final View v = vi.inflate(R.layout.detail_fragment, null);
         final ViewGroup container = (ViewGroup) view.findViewById(R.id.details_fragment_container);
-        if (holder.matchId == detail_match_id) {
+        if (holder.matchId == detailMatchId) {
             //Log.v(FetchScoreTask.LOG_TAG,"will insert extraView");
 
             container.addView(v, 0, new ViewGroup.LayoutParams(ViewGroup.LayoutParams.MATCH_PARENT

@@ -21,7 +21,7 @@ import barqsoft.footballscores.service.MyFetchService;
 public class MainScreenFragment extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     public static final int SCORES_LOADER = 0;
     private final String[] fragmentDate = new String[1];
-    public ScoresAdapter adapter;
+    public ScoresAdapter scoresAdapter;
 
     public MainScreenFragment() {
     }
@@ -41,17 +41,17 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
         updateScores();
         final View rootView = inflater.inflate(R.layout.fragment_main, container, false);
         final ListView scoreList = (ListView) rootView.findViewById(R.id.scores_list);
-        adapter = new ScoresAdapter(getActivity());
-        scoreList.setAdapter(adapter);
+        scoresAdapter = new ScoresAdapter(getActivity());
+        scoreList.setAdapter(scoresAdapter);
         getLoaderManager().initLoader(SCORES_LOADER, null, this);
-        adapter.detail_match_id = MainActivity.selectedMatchId;
+        scoresAdapter.detailMatchId = MainActivity.selectedMatchId;
         scoreList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 final ViewHolder selected = (ViewHolder) view.getTag();
-                adapter.detail_match_id = selected.matchId;
+                scoresAdapter.detailMatchId = selected.matchId;
                 MainActivity.selectedMatchId = (int) selected.matchId;
-                adapter.notifyDataSetChanged();
+                scoresAdapter.notifyDataSetChanged();
             }
         });
         return rootView;
@@ -82,13 +82,13 @@ public class MainScreenFragment extends Fragment implements LoaderManager.Loader
             cursor.moveToNext();
         }
         //Log.v(FetchScoreTask.LOG_TAG,"Loader query: " + String.valueOf(i));
-        adapter.swapCursor(cursor);
-        //adapter.notifyDataSetChanged();
+        scoresAdapter.swapCursor(cursor);
+        //scoresAdapter.notifyDataSetChanged();
     }
 
     @Override
     public void onLoaderReset(Loader<Cursor> cursorLoader) {
-        adapter.swapCursor(null);
+        scoresAdapter.swapCursor(null);
     }
 
 
