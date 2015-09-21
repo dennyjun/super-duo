@@ -30,25 +30,23 @@ import it.jaschke.alexandria.services.DownloadImage;
 
 public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<Cursor> {
     private static final String TAG = "INTENT_TO_SCAN_ACTIVITY";
-    private EditText ean;
-    private final int LOADER_ID = 1;
-    private View rootView;
-    private final String EAN_CONTENT="eanContent";
     private static final String SCAN_FORMAT = "scanFormat";
     private static final String SCAN_CONTENTS = "scanContents";
-
+    private static final int ISBN_LENGTH = 10;
+    private final int LOADER_ID = 1;
+    private final String EAN_CONTENT = "eanContent";
+    private EditText ean;
+    private View rootView;
     private String mScanFormat = "Format:";
     private String mScanContents = "Contents:";
 
-    private static final int ISBN_LENGTH = 10;
-
-    public AddBook(){
+    public AddBook() {
     }
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        if(ean!=null) {
+        if (ean != null) {
             outState.putString(EAN_CONTENT, ean.getText().toString());
         }
     }
@@ -77,7 +75,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                  * and just handle the relevant 10 digits after it.
                  */
                 String ean = s.toString();
-                if(ean.length() < ISBN_LENGTH){
+                if (ean.length() < ISBN_LENGTH) {
                     clearFields();
                     return;
                 }
@@ -108,7 +106,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             @Override
             public void onClick(View view) {
                 ean.setText("");
-                if(isTablet()) {
+                if (isTablet()) {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.right_container, new Fragment(), Fragment.class.getSimpleName())
                             .commit();
@@ -127,9 +125,9 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             }
         });
 
-        if(savedInstanceState != null){
+        if (savedInstanceState != null) {
             ean.setText(savedInstanceState.getString(EAN_CONTENT));
-            if(!ean.getText().toString().isEmpty()) {
+            if (!ean.getText().toString().isEmpty()) {
                 ean.setHint("");                                                                    // hint should only be blanked out when there is actual text being set
             }
         }
@@ -137,13 +135,13 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         return rootView;
     }
 
-    private void restartLoader(){
+    private void restartLoader() {
         getLoaderManager().restartLoader(LOADER_ID, null, this);
     }
 
     @Override
     public android.support.v4.content.Loader<Cursor> onCreateLoader(int id, Bundle args) {
-        if(ean.getText().length() == 0){
+        if (ean.getText().length() == 0) {
             return null;
         }
         final String newIsbnPrefix = getString(R.string.new_isbn_prefix);
@@ -164,7 +162,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
             return;
         }
 
-        if(!isTablet()) {
+        if (!isTablet()) {
             String bookTitle = data.getString(data.getColumnIndex(AlexandriaContract.BookEntry.TITLE));
             ((TextView) rootView.findViewById(R.id.bookTitle)).setText(bookTitle);
 
@@ -211,7 +209,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
     public void onLoaderReset(android.support.v4.content.Loader<Cursor> loader) {
     }
 
-    private void clearFields(){
+    private void clearFields() {
         ((TextView) rootView.findViewById(R.id.bookTitle)).setText("");
         ((TextView) rootView.findViewById(R.id.bookSubTitle)).setText("");
         ((TextView) rootView.findViewById(R.id.authors)).setText("");
@@ -219,7 +217,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.bookCover).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.save_button).setVisibility(View.INVISIBLE);
         rootView.findViewById(R.id.delete_button).setVisibility(View.INVISIBLE);
-        if(isTablet() && getActivity().findViewById(R.id.fullBookTitle) != null) {
+        if (isTablet() && getActivity().findViewById(R.id.fullBookTitle) != null) {
             getActivity().getSupportFragmentManager().beginTransaction()
                     .replace(R.id.right_container, new Fragment(), Fragment.class.getSimpleName())
                     .commit();
@@ -238,9 +236,9 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         super.onActivityResult(requestCode, resultCode, data);
         final IntentResult intentResult =
                 IntentIntegrator.parseActivityResult(requestCode, resultCode, data);
-        if(intentResult != null && intentResult.getContents() != null) {
+        if (intentResult != null && intentResult.getContents() != null) {
             final String barcode = intentResult.getContents();
-            if(isBarcodeValid(barcode)) {
+            if (isBarcodeValid(barcode)) {
                 ean.setText(barcode.substring(getString(R.string.new_isbn_prefix).length()));       // don't need to deal with universal ISBN prefix 978
             } else {
                 showScanFailedMsg();
@@ -266,5 +264,6 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         return getResources().getBoolean(R.bool.isTablet);
     }
 
-    public static class CaptureActivityAnyOrientation extends CaptureActivity {}
+    public static class CaptureActivityAnyOrientation extends CaptureActivity {
+    }
 }

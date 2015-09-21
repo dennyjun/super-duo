@@ -20,34 +20,32 @@ import it.jaschke.alexandria.api.Callback;
 
 public class MainActivity extends ActionBarActivity implements NavigationDrawerFragment.NavigationDrawerCallbacks, Callback {
 
+    public static final String MESSAGE_EVENT = "MESSAGE_EVENT";
+    public static final String MESSAGE_KEY = "MESSAGE_EXTRA";
+    public static boolean IS_TABLET = false;
     /**
      * Fragment managing the behaviors, interactions and presentation of the navigation drawer.
      */
     private NavigationDrawerFragment navigationDrawerFragment;
-
     /**
      * Used to store the last screen title. For use in {@link #restoreActionBar()}.
      */
     private CharSequence title;
-    public static boolean IS_TABLET = false;
     private BroadcastReceiver messageReceiver;
-
-    public static final String MESSAGE_EVENT = "MESSAGE_EVENT";
-    public static final String MESSAGE_KEY = "MESSAGE_EXTRA";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         IS_TABLET = isTablet();
-        if(IS_TABLET){
+        if (IS_TABLET) {
             setContentView(R.layout.activity_main_tablet);
-        }else {
+        } else {
             setContentView(R.layout.activity_main);
         }
 
         messageReceiver = new MessageReceiver();
         IntentFilter filter = new IntentFilter(MESSAGE_EVENT);
-        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver,filter);
+        LocalBroadcastManager.getInstance(this).registerReceiver(messageReceiver, filter);
 
         navigationDrawerFragment = (NavigationDrawerFragment)
                 getSupportFragmentManager().findFragmentById(R.id.navigation_drawer);
@@ -64,7 +62,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         FragmentManager fragmentManager = getSupportFragmentManager();
         Fragment nextFragment;
         String tag;
-        switch (position){
+        switch (position) {
             default:
             case 0:
                 nextFragment = new ListOfBooks();
@@ -86,7 +84,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 .addToBackStack((String) title)
                 .commit();
 
-        if(isTablet()) {
+        if (isTablet()) {
             if (findViewById(R.id.fullBookTitle) != null) {
                 fragmentManager.beginTransaction()
                         .replace(R.id.right_container, new Fragment(), Fragment.class.getSimpleName())
@@ -151,7 +149,7 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
         fragment.setArguments(args);
 
         int id = R.id.container;
-        if(findViewById(R.id.right_container) != null){
+        if (findViewById(R.id.right_container) != null) {
             id = R.id.right_container;
         }
         getSupportFragmentManager().beginTransaction()
@@ -160,29 +158,18 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
                 .commit();
     }
 
-    private class MessageReceiver extends BroadcastReceiver {                                       // fix typo from MessageReciever to MessageReceiver
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            if(intent.getStringExtra(MESSAGE_KEY) != null){
-                Toast.makeText(MainActivity.this,
-                        intent.getStringExtra(MESSAGE_KEY),
-                        Toast.LENGTH_LONG).show();
-            }
-        }
-    }
-
     private boolean isTablet() {
         return getResources().getBoolean(R.bool.isTablet);
     }
 
     @Override
     public void onBackPressed() {
-        if(getSupportFragmentManager().getBackStackEntryCount() < 2){
+        if (getSupportFragmentManager().getBackStackEntryCount() < 2) {
             finish();
         } else {
             final int lastEntry = getSupportFragmentManager().getBackStackEntryCount() - 1;
             title = getSupportFragmentManager().getBackStackEntryAt(lastEntry).getName();
-            if(title.toString().equals(Fragment.class.getSimpleName())) {
+            if (title.toString().equals(Fragment.class.getSimpleName())) {
                 getSupportFragmentManager().popBackStack();
                 title = getSupportFragmentManager().getBackStackEntryAt(lastEntry - 1).getName();
             }
@@ -194,16 +181,27 @@ public class MainActivity extends ActionBarActivity implements NavigationDrawerF
     }
 
     private int getPosition(final String name) {
-        if(name.equals(getString(R.string.books))
+        if (name.equals(getString(R.string.books))
                 || name.equals(getString(R.string.book_detail))) {
             return 0;
-        } else if(name.equals(getString(R.string.scan))
+        } else if (name.equals(getString(R.string.scan))
                 || name.equals(getString(R.string.found_book))) {
             return 1;
-        } else if(name.equals(getString(R.string.about))) {
+        } else if (name.equals(getString(R.string.about))) {
             return 2;
         } else {
             return -1;
+        }
+    }
+
+    private class MessageReceiver extends BroadcastReceiver {                                       // fix typo from MessageReciever to MessageReceiver
+        @Override
+        public void onReceive(Context context, Intent intent) {
+            if (intent.getStringExtra(MESSAGE_KEY) != null) {
+                Toast.makeText(MainActivity.this,
+                        intent.getStringExtra(MESSAGE_KEY),
+                        Toast.LENGTH_LONG).show();
+            }
         }
     }
 
