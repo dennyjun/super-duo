@@ -17,15 +17,15 @@ public class ScoresProvider extends ContentProvider {
     private static final int MATCHES_WITH_LEAGUE = 101;
     private static final int MATCHES_WITH_ID = 102;
     private static final int MATCHES_WITH_DATE = 103;
-    private static final SQLiteQueryBuilder ScoreQuery =
-            new SQLiteQueryBuilder();
+    private static final SQLiteQueryBuilder SCORE_QUERY =
+            new SQLiteQueryBuilder();                                                               // static final variables should be all capital
     private static final String SCORES_BY_LEAGUE = DatabaseContract.ScoresTable.LEAGUE_COL + " = ?";
     private static final String SCORES_BY_DATE =
             DatabaseContract.ScoresTable.DATE_COL + " LIKE ?";
     private static final String SCORES_BY_ID =
             DatabaseContract.ScoresTable.MATCH_ID + " = ?";
-    private static ScoresDBHelper mOpenHelper;
-    private final UriMatcher muriMatcher = buildUriMatcher();
+    private ScoresDBHelper scoresDBHelper;                                                          // Does not need to be static
+    private static final UriMatcher URI_MATCHER = buildUriMatcher();                                // static final variables should be all capital
 
     static UriMatcher buildUriMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -53,7 +53,7 @@ public class ScoresProvider extends ContentProvider {
 
     @Override
     public boolean onCreate() {
-        mOpenHelper = new ScoresDBHelper(getContext());
+        scoresDBHelper = new ScoresDBHelper(getContext());
         return false;
     }
 
@@ -64,7 +64,7 @@ public class ScoresProvider extends ContentProvider {
 
     @Override
     public String getType(Uri uri) {
-        final int match = muriMatcher.match(uri);
+        final int match = URI_MATCHER.match(uri);
         switch (match) {
             case MATCHES:
                 return DatabaseContract.ScoresTable.CONTENT_TYPE;
@@ -90,7 +90,7 @@ public class ScoresProvider extends ContentProvider {
         //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(match));
         switch (match) {
             case MATCHES:
-                retCursor = mOpenHelper.getReadableDatabase().query(
+                retCursor = scoresDBHelper.getReadableDatabase().query(
                         DatabaseContract.SCORES_TABLE,
                         projection,
                         null,
@@ -102,7 +102,7 @@ public class ScoresProvider extends ContentProvider {
             case MATCHES_WITH_DATE:
                 //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[1]);
                 //Log.v(FetchScoreTask.LOG_TAG,selectionArgs[2]);
-                retCursor = mOpenHelper.getReadableDatabase().query(
+                retCursor = scoresDBHelper.getReadableDatabase().query(
                         DatabaseContract.SCORES_TABLE,
                         projection,
                         SCORES_BY_DATE,
@@ -112,7 +112,7 @@ public class ScoresProvider extends ContentProvider {
                         sortOrder);
                 break;
             case MATCHES_WITH_ID:
-                retCursor = mOpenHelper.getReadableDatabase().query(
+                retCursor = scoresDBHelper.getReadableDatabase().query(
                         DatabaseContract.SCORES_TABLE,
                         projection,
                         SCORES_BY_ID,
@@ -122,7 +122,7 @@ public class ScoresProvider extends ContentProvider {
                         sortOrder);
                 break;
             case MATCHES_WITH_LEAGUE:
-                retCursor = mOpenHelper.getReadableDatabase().query(
+                retCursor = scoresDBHelper.getReadableDatabase().query(
                         DatabaseContract.SCORES_TABLE,
                         projection,
                         SCORES_BY_LEAGUE,
@@ -147,9 +147,9 @@ public class ScoresProvider extends ContentProvider {
 
     @Override
     public int bulkInsert(Uri uri, @NonNull ContentValues[] values) {
-        SQLiteDatabase db = mOpenHelper.getWritableDatabase();
+        SQLiteDatabase db = scoresDBHelper.getWritableDatabase();
         //db.delete(DatabaseContract.SCORES_TABLE,null,null);
-        //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(muriMatcher.match(uri)));
+        //Log.v(FetchScoreTask.LOG_TAG,String.valueOf(URI_MATCHER.match(uri)));
         switch (match_uri(uri)) {
             case MATCHES:
                 db.beginTransaction();
