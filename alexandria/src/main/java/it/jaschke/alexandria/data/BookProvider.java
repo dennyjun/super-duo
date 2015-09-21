@@ -9,6 +9,8 @@ import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 
+import it.jaschke.alexandria.R;
+
 /**
  * Created by saj on 24/12/14.
  */
@@ -33,8 +35,10 @@ public class BookProvider extends ContentProvider {
         bookFull = new SQLiteQueryBuilder();
         bookFull.setTables(
                 AlexandriaContract.BookEntry.TABLE_NAME + " LEFT OUTER JOIN " +
-                        AlexandriaContract.AuthorEntry.TABLE_NAME + " USING (" + AlexandriaContract.BookEntry._ID + ")" +
-                        " LEFT OUTER JOIN " + AlexandriaContract.CategoryEntry.TABLE_NAME + " USING (" + AlexandriaContract.BookEntry._ID + ")");
+                        AlexandriaContract.AuthorEntry.TABLE_NAME +
+                        " USING (" + AlexandriaContract.BookEntry._ID + ")" +
+                        " LEFT OUTER JOIN " + AlexandriaContract.CategoryEntry.TABLE_NAME +
+                        " USING (" + AlexandriaContract.BookEntry._ID + ")");
     }
 
     private DbHelper dbHelper;
@@ -141,12 +145,17 @@ public class BookProvider extends ContentProvider {
                         AlexandriaContract.BookEntry.TABLE_NAME + "." + AlexandriaContract.BookEntry.SUBTITLE,
                         AlexandriaContract.BookEntry.TABLE_NAME + "." + AlexandriaContract.BookEntry.IMAGE_URL,
                         AlexandriaContract.BookEntry.TABLE_NAME + "." + AlexandriaContract.BookEntry.DESC,
-                        "group_concat(DISTINCT " + AlexandriaContract.AuthorEntry.TABLE_NAME + "." + AlexandriaContract.AuthorEntry.AUTHOR + ") as " + AlexandriaContract.AuthorEntry.AUTHOR,
-                        "group_concat(DISTINCT " + AlexandriaContract.CategoryEntry.TABLE_NAME + "." + AlexandriaContract.CategoryEntry.CATEGORY + ") as " + AlexandriaContract.CategoryEntry.CATEGORY
+                        "group_concat(DISTINCT " + AlexandriaContract.AuthorEntry.TABLE_NAME + "." +
+                                AlexandriaContract.AuthorEntry.AUTHOR + ") as " +
+                                AlexandriaContract.AuthorEntry.AUTHOR,
+                        "group_concat(DISTINCT " + AlexandriaContract.CategoryEntry.TABLE_NAME + "." +
+                                AlexandriaContract.CategoryEntry.CATEGORY + ") as " +
+                                AlexandriaContract.CategoryEntry.CATEGORY
                 };
                 retCursor = bookFull.query(dbHelper.getReadableDatabase(),
                         bfd_projection,
-                        AlexandriaContract.BookEntry.TABLE_NAME + "." + AlexandriaContract.BookEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
+                        AlexandriaContract.BookEntry.TABLE_NAME + "." +
+                                AlexandriaContract.BookEntry._ID + " = '" + ContentUris.parseId(uri) + "'",
                         selectionArgs,
                         AlexandriaContract.BookEntry.TABLE_NAME + "." + AlexandriaContract.BookEntry._ID,
                         null,
@@ -156,8 +165,12 @@ public class BookProvider extends ContentProvider {
                 String[] bf_projection = {
                         AlexandriaContract.BookEntry.TABLE_NAME + "." + AlexandriaContract.BookEntry.TITLE,
                         AlexandriaContract.BookEntry.TABLE_NAME + "." + AlexandriaContract.BookEntry.IMAGE_URL,
-                        "group_concat(DISTINCT " + AlexandriaContract.AuthorEntry.TABLE_NAME + "." + AlexandriaContract.AuthorEntry.AUTHOR + ") as " + AlexandriaContract.AuthorEntry.AUTHOR,
-                        "group_concat(DISTINCT " + AlexandriaContract.CategoryEntry.TABLE_NAME + "." + AlexandriaContract.CategoryEntry.CATEGORY + ") as " + AlexandriaContract.CategoryEntry.CATEGORY
+                        "group_concat(DISTINCT " + AlexandriaContract.AuthorEntry.TABLE_NAME + "." +
+                                AlexandriaContract.AuthorEntry.AUTHOR + ") as " +
+                                AlexandriaContract.AuthorEntry.AUTHOR,
+                        "group_concat(DISTINCT " + AlexandriaContract.CategoryEntry.TABLE_NAME + "." +
+                                AlexandriaContract.CategoryEntry.CATEGORY + ") as " +
+                                AlexandriaContract.CategoryEntry.CATEGORY
                 };
                 retCursor = bookFull.query(dbHelper.getReadableDatabase(),
                         bf_projection,
@@ -168,7 +181,8 @@ public class BookProvider extends ContentProvider {
                         sortOrder);
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException(
+                        getContext().getString(R.string.msg_unknown_uri_prefix) + uri);
         }
 
         retCursor.setNotificationUri(getContext().getContentResolver(), uri);
@@ -197,7 +211,8 @@ public class BookProvider extends ContentProvider {
             case CATEGORY:
                 return AlexandriaContract.CategoryEntry.CONTENT_TYPE;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException(
+                        getContext().getString(R.string.msg_unknown_uri_prefix) + uri);
         }
     }
 
@@ -212,7 +227,8 @@ public class BookProvider extends ContentProvider {
                 if (_id > 0) {
                     returnUri = AlexandriaContract.BookEntry.buildBookUri(_id);
                 } else {
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException(
+                            getContext().getString(R.string.msg_failed_to_insert_row_prefix) + uri);
                 }
                 getContext().getContentResolver().notifyChange(AlexandriaContract.BookEntry.buildFullBookUri(_id), null);
                 break;
@@ -220,21 +236,26 @@ public class BookProvider extends ContentProvider {
             case AUTHOR: {
                 long _id = db.insert(AlexandriaContract.AuthorEntry.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = AlexandriaContract.AuthorEntry.buildAuthorUri(values.getAsLong("_id"));
+                    returnUri = AlexandriaContract.AuthorEntry.buildAuthorUri(
+                            values.getAsLong(AlexandriaContract.AuthorEntry._ID));
                 else
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException(
+                            getContext().getString(R.string.msg_failed_to_insert_row_prefix) + uri);
                 break;
             }
             case CATEGORY: {
                 long _id = db.insert(AlexandriaContract.CategoryEntry.TABLE_NAME, null, values);
                 if (_id > 0)
-                    returnUri = AlexandriaContract.CategoryEntry.buildCategoryUri(values.getAsLong("_id"));
+                    returnUri = AlexandriaContract.CategoryEntry.buildCategoryUri(
+                            values.getAsLong(AlexandriaContract.CategoryEntry._ID));
                 else
-                    throw new android.database.SQLException("Failed to insert row into " + uri);
+                    throw new android.database.SQLException(
+                            getContext().getString(R.string.msg_failed_to_insert_row_prefix) + uri);
                 break;
             }
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException(
+                        getContext().getString(R.string.msg_unknown_uri_prefix) + uri);
         }
         return returnUri;
     }
@@ -264,7 +285,8 @@ public class BookProvider extends ContentProvider {
                         selectionArgs);
                 break;
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException(
+                        getContext().getString(R.string.msg_unknown_uri_prefix) + uri);
         }
         // Because a null deletes all rows
         if (selection == null || rowsDeleted != 0) {
@@ -293,7 +315,8 @@ public class BookProvider extends ContentProvider {
                 break;
 
             default:
-                throw new UnsupportedOperationException("Unknown uri: " + uri);
+                throw new UnsupportedOperationException(
+                        getContext().getString(R.string.msg_unknown_uri_prefix) + uri);
         }
         if (rowsUpdated != 0) {
             getContext().getContentResolver().notifyChange(uri, null);

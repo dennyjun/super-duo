@@ -34,7 +34,22 @@ public class BookService extends IntentService {
     public static final String FETCH_BOOK = "it.jaschke.alexandria.services.action.FETCH_BOOK";
     public static final String DELETE_BOOK = "it.jaschke.alexandria.services.action.DELETE_BOOK";
     public static final String EAN = "it.jaschke.alexandria.services.extra.EAN";
-    private final String LOG_TAG = BookService.class.getSimpleName();
+    private static final String LOG_TAG = BookService.class.getSimpleName();
+
+    private static final String FORECAST_BASE_URL = "https://www.googleapis.com/books/v1/volumes?";
+    private static final String QUERY_PARAM = "q";
+    private static final String ITEMS = "items";
+    private static final String VOLUME_INFO = "volumeInfo";
+    private static final String TITLE = "title";
+    private static final String SUBTITLE = "subtitle";
+    private static final String AUTHORS = "authors";
+    private static final String DESC = "description";
+    private static final String CATEGORIES = "categories";
+    private static final String IMG_URL_PATH = "imageLinks";
+    private static final String IMG_URL = "thumbnail";
+
+    private static final String ISBN_PREFIX = "isbn:";
+    private static final String GET_REQUEST_METHOD = "GET";
 
     public BookService() {
         super("Alexandria");
@@ -60,7 +75,10 @@ public class BookService extends IntentService {
      */
     private void deleteBook(String ean) {
         if (ean != null) {
-            getContentResolver().delete(AlexandriaContract.BookEntry.buildBookUri(Long.parseLong(ean)), null, null);
+            getContentResolver().delete(
+                    AlexandriaContract.BookEntry.buildBookUri(Long.parseLong(ean)),
+                    null,
+                    null);
         }
     }
 
@@ -94,10 +112,9 @@ public class BookService extends IntentService {
         String bookJsonString = null;
 
         try {
-            final String FORECAST_BASE_URL = "https://www.googleapis.com/books/v1/volumes?";
-            final String QUERY_PARAM = "q";
 
-            final String ISBN_PARAM = "isbn:" + ean;
+
+            final String ISBN_PARAM = ISBN_PREFIX + ean;
 
             Uri builtUri = Uri.parse(FORECAST_BASE_URL).buildUpon()
                     .appendQueryParameter(QUERY_PARAM, ISBN_PARAM)
@@ -106,7 +123,7 @@ public class BookService extends IntentService {
             URL url = new URL(builtUri.toString());
 
             urlConnection = (HttpURLConnection) url.openConnection();
-            urlConnection.setRequestMethod("GET");
+            urlConnection.setRequestMethod(GET_REQUEST_METHOD);
             urlConnection.connect();
 
             InputStream inputStream = urlConnection.getInputStream();
@@ -127,7 +144,7 @@ public class BookService extends IntentService {
             }
             bookJsonString = buffer.toString();
         } catch (Exception e) {
-            Log.e(LOG_TAG, "Error ", e);
+            Log.e(LOG_TAG, getString(R.string.msg_error_prefix), e);
         } finally {
             if (urlConnection != null) {
                 urlConnection.disconnect();
@@ -136,7 +153,7 @@ public class BookService extends IntentService {
                 try {
                     reader.close();
                 } catch (final IOException e) {
-                    Log.e(LOG_TAG, "Error closing stream", e);
+                    Log.e(LOG_TAG, getString(R.string.msg_error_closing_stream), e);
                 }
             }
 
@@ -150,17 +167,7 @@ public class BookService extends IntentService {
             return;
         }
 
-        final String ITEMS = "items";
 
-        final String VOLUME_INFO = "volumeInfo";
-
-        final String TITLE = "title";
-        final String SUBTITLE = "subtitle";
-        final String AUTHORS = "authors";
-        final String DESC = "description";
-        final String CATEGORIES = "categories";
-        final String IMG_URL_PATH = "imageLinks";
-        final String IMG_URL = "thumbnail";
 
         try {
             JSONObject bookJson = new JSONObject(bookJsonString);

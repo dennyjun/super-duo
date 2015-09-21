@@ -9,6 +9,7 @@ import android.util.Log;
  * Created by saj on 22/12/14.
  */
 public class DbHelper extends SQLiteOpenHelper {
+    private static final String LOG_TAG = DbHelper.class.getSimpleName();
 
     public static final String DATABASE_NAME = "alexandria.db";
     private static final int DATABASE_VERSION = 1;
@@ -41,9 +42,9 @@ public class DbHelper extends SQLiteOpenHelper {
                 AlexandriaContract.BookEntry.TABLE_NAME + " (" + AlexandriaContract.BookEntry._ID + "))";
 
 
-        Log.d("sql-statments", SQL_CREATE_BOOK_TABLE);
-        Log.d("sql-statments", SQL_CREATE_AUTHOR_TABLE);
-        Log.d("sql-statments", SQL_CREATE_CATEGORY_TABLE);
+        Log.d(LOG_TAG, SQL_CREATE_BOOK_TABLE);
+        Log.d(LOG_TAG, SQL_CREATE_AUTHOR_TABLE);
+        Log.d(LOG_TAG, SQL_CREATE_CATEGORY_TABLE);
 
         db.execSQL(SQL_CREATE_BOOK_TABLE);
         db.execSQL(SQL_CREATE_AUTHOR_TABLE);

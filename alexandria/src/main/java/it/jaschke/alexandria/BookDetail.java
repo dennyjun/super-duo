@@ -28,6 +28,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
     public static final String EAN_KEY = "EAN";
     public static final String HIDE_DELETE_BUTTON_KEY = "DEL_BUTTON_KEY";
+    private static final String PLAIN_TEXT_INTENT_TYPE = "text/plain";
     private final int LOADER_ID = 10;
     private View rootView;
     private String ean;
@@ -102,7 +103,7 @@ public class BookDetail extends Fragment implements LoaderManager.LoaderCallback
 
         Intent shareIntent = new Intent(Intent.ACTION_SEND);
         shareIntent.addFlags(Intent.FLAG_ACTIVITY_NEW_DOCUMENT);
-        shareIntent.setType("text/plain");
+        shareIntent.setType(PLAIN_TEXT_INTENT_TYPE);
         shareIntent.putExtra(Intent.EXTRA_TEXT, getString(R.string.share_text) + bookTitle);
         shareActionProvider.setShareIntent(shareIntent);
 

@@ -75,7 +75,8 @@ public class NavigationDrawerFragment extends Fragment {
             mFromSavedInstanceState = true;
         } else {
             SharedPreferences prefs = PreferenceManager.getDefaultSharedPreferences(getActivity());
-            mCurrentSelectedPosition = Integer.parseInt(prefs.getString("pref_startFragment", "0"));
+            mCurrentSelectedPosition =
+                    Integer.parseInt(prefs.getString(getString(R.string.pref_start_key), "0"));
             selectItem(mCurrentSelectedPosition);
         }
 
@@ -214,7 +215,8 @@ public class NavigationDrawerFragment extends Fragment {
         try {
             mCallbacks = (NavigationDrawerCallbacks) activity;
         } catch (ClassCastException e) {
-            throw new ClassCastException("Activity must implement NavigationDrawerCallbacks.");
+            throw new ClassCastException(activity.getString(
+                    R.string.msg_activity_must_implement_navigation_drawer_callbacks));
         }
     }
 
