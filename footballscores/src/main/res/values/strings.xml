@@ -63,4 +63,14 @@
     <string name="match_day_finals">Final</string>
     <string name="match_day_normal_prefix">"Matchday : "</string>
     <string name="not_known_league_msg">Not known League Please report</string>
+    <string name="team_name_arsenal_london">Arsenal London FC</string>
+    <string name="team_name_manchester_united">Manchester United FC</string>
+    <string name="team_name_swansea_city">Swansea City</string>
+    <string name="team_name_leicester_city">Leicester City</string>
+    <string name="team_name_everton">Everton FC</string>
+    <string name="team_name_west_ham_united">West Ham United FC</string>
+    <string name="team_name_tottenham_hotspur">Tottenham Hotspur FC</string>
+    <string name="team_name_west_bromwich_albion">West Bromwich Albion</string>
+    <string name="team_name_sunderland">Sunderland AFC</string>
+    <string name="team_name_stoke_city">Stoke City FC</string>
 </resources>

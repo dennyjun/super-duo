@@ -74,9 +74,9 @@ public class ScoreWidgetService extends RemoteViewsService {
                     scoresCursor.getInt(ScoresAdapter.COL_HOME_GOALS),
                     scoresCursor.getInt(ScoresAdapter.COL_AWAY_GOALS)));
             remoteViews.setImageViewResource(R.id.home_crest, Utilities.getTeamCrestByTeamName(
-                    scoresCursor.getString(ScoresAdapter.COL_HOME)));
+                    context, scoresCursor.getString(ScoresAdapter.COL_HOME)));
             remoteViews.setImageViewResource(R.id.away_crest, Utilities.getTeamCrestByTeamName(
-                    scoresCursor.getString(ScoresAdapter.COL_AWAY)));
+                    context, scoresCursor.getString(ScoresAdapter.COL_AWAY)));
             return remoteViews;
         }
 

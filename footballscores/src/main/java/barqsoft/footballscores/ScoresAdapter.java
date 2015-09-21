@@ -50,9 +50,9 @@ public class ScoresAdapter extends CursorAdapter {                              
         holder.score.setText(
                 Utilities.getScores(cursor.getInt(COL_HOME_GOALS), cursor.getInt(COL_AWAY_GOALS)));
         holder.matchId = cursor.getDouble(COL_ID);
-        holder.homeCrest.setImageResource(Utilities.getTeamCrestByTeamName(
+        holder.homeCrest.setImageResource(Utilities.getTeamCrestByTeamName(context,
                 cursor.getString(COL_HOME)));
-        holder.awayCrest.setImageResource(Utilities.getTeamCrestByTeamName(
+        holder.awayCrest.setImageResource(Utilities.getTeamCrestByTeamName(context,
                 cursor.getString(COL_AWAY)
         ));
         //Log.v(FetchScoreTask.LOG_TAG,holder.homeName.getText() + " Vs. " + holder.awayName.getText() +" id " + String.valueOf(holder.matchId));
