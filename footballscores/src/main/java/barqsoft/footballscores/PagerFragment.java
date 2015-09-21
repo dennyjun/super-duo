@@ -22,12 +22,12 @@ import java.util.Locale;
 public class PagerFragment extends Fragment {
     public static final int NUM_PAGES = 5;
     private final MainScreenFragment[] viewFragments = new MainScreenFragment[5];
-    public ViewPager mPagerHandler;
+    public ViewPager pagerHandler;                                                                  // remove m prefix in variable. keep naming conventions constant.
 
     @Override
     public View onCreateView(LayoutInflater inflater, @Nullable ViewGroup container, @Nullable Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.pager_fragment, container, false);
-        mPagerHandler = (ViewPager) rootView.findViewById(R.id.pager);
+        pagerHandler = (ViewPager) rootView.findViewById(R.id.pager);
         final MyPageAdapter pagerAdapter = new MyPageAdapter(getChildFragmentManager());
         for (int i = 0; i < NUM_PAGES; i++) {
             final Date fragmentDate = new Date(System.currentTimeMillis() + ((i - 2) * 86400000));
@@ -35,8 +35,8 @@ public class PagerFragment extends Fragment {
             viewFragments[i].setFragmentDate(
                     DatabaseContract.ScoresTable.DATE_FORMAT.format(fragmentDate));
         }
-        mPagerHandler.setAdapter(pagerAdapter);
-        mPagerHandler.setCurrentItem(MainActivity.currentFragment);
+        pagerHandler.setAdapter(pagerAdapter);
+        pagerHandler.setCurrentItem(MainActivity.currentFragment);
         return rootView;
     }
 

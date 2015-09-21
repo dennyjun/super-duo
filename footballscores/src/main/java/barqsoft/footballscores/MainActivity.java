@@ -58,7 +58,7 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
-        final int currentPager = myMain.mPagerHandler.getCurrentItem();
+        final int currentPager = myMain.pagerHandler.getCurrentItem();
         Log.v(saveTag, getString(R.string.will_save_msg));
         Log.v(saveTag, getString(R.string.fragment_prefix_msg) + String.valueOf(currentPager));
         Log.v(saveTag, getString(R.string.selected_id_prefix_msg) + selectedMatchId);
