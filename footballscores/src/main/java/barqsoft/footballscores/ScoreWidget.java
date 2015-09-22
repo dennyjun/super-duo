@@ -41,7 +41,7 @@ public class ScoreWidget extends AppWidgetProvider {
     public void onReceive(Context context, Intent intent) {
         super.onReceive(context, intent);
 
-        if(UPDATE_WIDGET_ACTION.equals(intent.getAction())) {
+        if(UPDATE_WIDGET_ACTION.equals(intent.getAction())) {                                       // Idea from http://android-er.blogspot.com/2010/10/update-widget-in-onreceive-method.html
             final AppWidgetManager appWidgetManager = AppWidgetManager.getInstance(context);
             final ComponentName componentName =
                     new ComponentName(context.getPackageName(),ScoreWidget.class.getName());
