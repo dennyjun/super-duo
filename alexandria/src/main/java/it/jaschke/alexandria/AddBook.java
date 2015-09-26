@@ -49,6 +49,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         if (ean != null) {
             outState.putString(EAN_CONTENT, ean.getText().toString());
         }
+        clearFields();                                                                              // Fixes glitch: title displaying when it shouldn't
     }
 
     @Override
@@ -116,7 +117,7 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                if(ean.getText().toString().length() == ISBN_LENGTH) {                              // only process if EAN length is valid
+                if (ean.getText().toString().length() == ISBN_LENGTH) {                              // only process if EAN length is valid
                     final Intent bookIntent = new Intent(getActivity(), BookService.class);
                     bookIntent.putExtra(BookService.EAN, ean.getText().toString());
                     bookIntent.setAction(BookService.DELETE_BOOK);
