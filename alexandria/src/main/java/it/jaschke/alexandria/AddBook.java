@@ -74,9 +74,8 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
                  * All ISBN-13 start with 978 so I explicitly display it next to the EditText field
                  * and just handle the relevant 10 digits after it.
                  */
-                String ean = s.toString();
+                final String ean = s.toString();
                 if (ean.length() < ISBN_LENGTH) {
-                    clearFields();
                     return;
                 }
 
@@ -105,23 +104,25 @@ public class AddBook extends Fragment implements LoaderManager.LoaderCallbacks<C
         rootView.findViewById(R.id.save_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                ean.setText("");
                 if (isTablet()) {
                     getActivity().getSupportFragmentManager().beginTransaction()
                             .replace(R.id.right_container, new Fragment(), Fragment.class.getSimpleName())
                             .commit();
                 }
+                clearFields();
             }
         });
 
         rootView.findViewById(R.id.delete_button).setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent bookIntent = new Intent(getActivity(), BookService.class);
-                bookIntent.putExtra(BookService.EAN, ean.getText().toString());
-                bookIntent.setAction(BookService.DELETE_BOOK);
-                getActivity().startService(bookIntent);
-                ean.setText("");
+                if(ean.getText().toString().length() == ISBN_LENGTH) {                              // only process if EAN length is valid
+                    final Intent bookIntent = new Intent(getActivity(), BookService.class);
+                    bookIntent.putExtra(BookService.EAN, ean.getText().toString());
+                    bookIntent.setAction(BookService.DELETE_BOOK);
+                    getActivity().startService(bookIntent);
+                }
+                clearFields();
             }
         });
 
