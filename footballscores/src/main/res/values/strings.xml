@@ -43,6 +43,7 @@
     <string name="match_time_desc">Match time</string>
     <string name="away_crest_desc">Image of away team\'s crest</string>
     <string name="away_name_desc">Away team\'s home name</string>
+    <string name="share_desc">Share button</string>
     <string name="appwidget_text">Football Scores</string>
     <string name="add_widget">Add widget</string>
     <string name="no_games_today">No Games Today</string>
